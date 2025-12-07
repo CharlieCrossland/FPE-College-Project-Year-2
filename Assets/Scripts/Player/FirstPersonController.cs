@@ -21,13 +21,12 @@ public class FirstPersonController : MonoBehaviour
     [Header("References")]
     [SerializeField] private CharacterController characterController;
     [SerializeField] private CinemachineCamera mainCamera;
-    [SerializeField] private PlayerInputHandler playerInputHandler;
 
     private Vector3 currentMovement;
     private float verticalRotation;
 
     // directly manipulate the variable
-    private float CurrentSpeed => walkSpeed * (playerInputHandler.SprintTriggered ? sprintMultiplier : 1);
+    private float CurrentSpeed => walkSpeed * (PlayerInputHandler.Instance.SprintTriggered ? sprintMultiplier : 1);
 
     private void Awake()
     {
@@ -37,7 +36,7 @@ public class FirstPersonController : MonoBehaviour
     void CheckReferences()
     {
         // avoid anything missing that could break the game
-        // a really shitty way to do this but i wanted to learn how to use returns
+        // a really awful way to do this but i wanted to learn how to use returns
         // bite me
         bool allReferencesGrabbed = CheckNull();
 
@@ -49,7 +48,7 @@ public class FirstPersonController : MonoBehaviour
         {
             characterController = GetComponent<CharacterController>();
             mainCamera = GetComponentInChildren<CinemachineCamera>();
-            playerInputHandler = PlayerInputHandler.Instance;
+            return;
         }
     }
 
@@ -57,7 +56,7 @@ public class FirstPersonController : MonoBehaviour
     {
         // variables may be set as null/are missing
         // these are failsafes incase they do
-        if (characterController || mainCamera || playerInputHandler == null)
+        if (characterController || mainCamera == null)
         {
             return false;
         }
@@ -83,10 +82,10 @@ public class FirstPersonController : MonoBehaviour
     
     private Vector3 CalculateWorldDirection()
     {
-        // use the players input to find a local position in x and y
-        // use the local position to then find the global space position
+        // i am using the players input to find a local position in x and y
+        // then using that local position to then find the global space position which can then be fed back to HandleMovement
         // return that to the HandleMovement
-        Vector3 inputDirection = new (playerInputHandler.MovementInput.x, 0, playerInputHandler.MovementInput.y);
+        Vector3 inputDirection = new (PlayerInputHandler.Instance.MovementInput.x, 0, PlayerInputHandler.Instance.MovementInput.y);
         Vector3 worldDirection = transform.TransformDirection(inputDirection);
         return worldDirection.normalized;
     }
@@ -100,14 +99,13 @@ public class FirstPersonController : MonoBehaviour
         {
             currentMovement.y = -0.5f;
 
-            if(playerInputHandler.JumpTriggered)
+            if(PlayerInputHandler.Instance.JumpTriggered)
             {
                 currentMovement.y = jumpForce;
             }
         }
         else
-        {
-            
+        {            
             currentMovement.y += Physics.gravity.y * gravityMultiplier * Time.deltaTime;
         }
     }
@@ -137,8 +135,8 @@ public class FirstPersonController : MonoBehaviour
     
     private void HandleRotation()
     {
-        float mouseXRotation = playerInputHandler.RotationInput.x * mouseSensitivity;
-        float mouseYRotation = playerInputHandler.RotationInput.y * mouseSensitivity;
+        float mouseXRotation = PlayerInputHandler.Instance.RotationInput.x * mouseSensitivity;
+        float mouseYRotation = PlayerInputHandler.Instance.RotationInput.y * mouseSensitivity;
         
         ApplyHorizontalRotation(mouseXRotation);
         ApplyVerticalRotation(mouseYRotation);        

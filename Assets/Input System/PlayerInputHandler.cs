@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerInputHandler : MonoBehaviour
 {
+    // this allows for the script to be referenced anywhere, use PlayerInputHandler.Instance
     public static PlayerInputHandler Instance;
 
     [Header("Input Action Asset")]
