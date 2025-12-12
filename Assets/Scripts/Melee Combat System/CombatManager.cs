@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class WeaponController : MonoBehaviour
+public class CombatManager : MonoBehaviour
 {
     [SerializeField] private Animator animator;
     private bool canAttack = true;
@@ -11,13 +11,13 @@ public class WeaponController : MonoBehaviour
     [SerializeField] private GameObject fist;
     private int punchCounter;
     private float punchCountdown;
-    private float maxPunchCountdown = 2f;
+    readonly private float maxPunchCountdown = 2f;
     private bool startCounterManager;
     private bool noWeapon;
 
     private void Awake()
     {
-        fist = GameObject.Find("Fist_R");
+        fist = GameObject.Find("Fists");
         animator = fist.GetComponent<Animator>();
         noWeapon = false;
         punchCountdown = maxPunchCountdown;
@@ -60,6 +60,9 @@ public class WeaponController : MonoBehaviour
             case 2:
                 PunchAttack3();
                 break;
+            case 3:
+                PunchAttack4();
+                break;
         }
          
     }
@@ -67,6 +70,7 @@ public class WeaponController : MonoBehaviour
     private void PunchAttack1()
     {
         canAttack = false;
+        punchCountdown = maxPunchCountdown;
         punchCounter =+ 1;
         animator.SetTrigger("Punch1");
         StartCoroutine(ResetAttackCD());
@@ -75,7 +79,8 @@ public class WeaponController : MonoBehaviour
     private void PunchAttack2()
     {
         canAttack = false;
-        punchCounter =+ 1;
+        punchCountdown = maxPunchCountdown;
+        punchCounter =+ 2;
         animator.SetTrigger("Punch2");
         StartCoroutine(ResetAttackCD());
     }
@@ -83,15 +88,32 @@ public class WeaponController : MonoBehaviour
     private void PunchAttack3()
     {
         canAttack = false;
-        punchCounter = +1;
+        punchCountdown = maxPunchCountdown;
+        punchCounter =+ 3;
         animator.SetTrigger("Punch3");
         StartCoroutine(ResetAttackCD());
+    }
+
+    private void PunchAttack4()
+    {
+        canAttack = false;
+        punchCountdown = maxPunchCountdown;
+        punchCounter =+ 3;
+        animator.SetTrigger("Punch4");
+        StartCoroutine(ResetAttackCD());
+        StartCoroutine(ResetPunchCombo());
     }
 
     IEnumerator ResetAttackCD()
     {
         yield return new WaitForSeconds(attackCD);
         canAttack = true;
+        yield break;
+    }
+
+    IEnumerator ResetPunchCombo()
+    {
+        punchCounter = 0;
         yield break;
     }
 
