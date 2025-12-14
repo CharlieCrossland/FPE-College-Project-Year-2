@@ -33,22 +33,17 @@ public class FirstPersonController : MonoBehaviour
         CheckReferences();
     }
 
-    void CheckReferences()
+    private void CheckReferences()
     {
         // avoid anything missing that could break the game
         // a really awful way to do this but i wanted to learn how to use returns
         // bite me
         bool allReferencesGrabbed = CheckNull();
 
-        if (allReferencesGrabbed == true)
-        {
-            return;
-        }
-        if (allReferencesGrabbed == false)
+        if (!allReferencesGrabbed)
         {
             characterController = GetComponent<CharacterController>();
             mainCamera = GetComponentInChildren<CinemachineCamera>();
-            return;
         }
     }
 
