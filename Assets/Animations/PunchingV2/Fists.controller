@@ -210,7 +210,7 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
-    m_Name: Base Layer
+    m_Name: Punches
     m_StateMachine: {fileID: 2022355202558661155}
     m_Mask: {fileID: 0}
     m_Motions: []
@@ -228,7 +228,7 @@ AnimatorStateMachine:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Base Layer
+  m_Name: Punches
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -3771992977493234011}
