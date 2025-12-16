@@ -1,3 +1,4 @@
+using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,13 +20,18 @@ public class PlayerInputHandler : MonoBehaviour
     [SerializeField] private string sprint = "Sprint";
     [SerializeField] private string interact = "Interact";
     [SerializeField] private string attack = "Attack";
+    [SerializeField] private string kick = "Kick";
+    [SerializeField] private string drop = "Drop";
 
+    [Header("Input Actions")]
     private InputAction movementAction;
     private InputAction rotationAction;
     private InputAction jumpAction;
     private InputAction sprintAction;
     private InputAction interactAction;
-    private InputAction attackAction;
+    public InputAction attackAction;
+    public InputAction kickAction;
+    private InputAction dropAction;
     
     public Vector2 MovementInput { get; private set; }
     public Vector2 RotationInput { get; private set; }
@@ -33,6 +39,8 @@ public class PlayerInputHandler : MonoBehaviour
     public bool SprintTriggered { get; private set; }
     public bool InteractTriggered { get; private set; }
     public bool AttackTriggered { get; private set; }
+    public bool KickTriggered { get; private set; }
+    public bool DropTriggered { get; private set; }
 
 
     private void Awake()
@@ -47,6 +55,8 @@ public class PlayerInputHandler : MonoBehaviour
         sprintAction = mapReference.FindAction(sprint);
         interactAction = mapReference.FindAction(interact);
         attackAction = mapReference.FindAction(attack);
+        kickAction = mapReference.FindAction(kick);
+        dropAction = mapReference.FindAction(drop);
 
         SubscribeActionValuesToInputEvents();
     }
@@ -70,6 +80,12 @@ public class PlayerInputHandler : MonoBehaviour
 
         attackAction.performed += inputInfo => AttackTriggered = true;
         attackAction.canceled += inputInfo => AttackTriggered = false;
+
+        kickAction.performed += inputInfo => KickTriggered = true;
+        kickAction.canceled += inputInfo => KickTriggered = false;
+
+        dropAction.performed += inputInfo => DropTriggered = true;
+        dropAction.canceled += inputInfo => DropTriggered = false;
     }
     
     private void OnEnable() 

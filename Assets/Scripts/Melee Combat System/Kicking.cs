@@ -1,22 +1,19 @@
 using UnityEngine;
-using System.Collections;
+using UnityEngine.Events;
 
 public class Kicking : MonoBehaviour
 {
-    [SerializeField] private Animator animator;
-    private bool canAttack = true;
-    private float attackCD = 1.0f;
-
-    [Header("Punch")]
+    [Header("Kick")]
     [SerializeField] private GameObject legs;
-    private float kickCountdown;
-    readonly private float maxKickCountdown = 2f;
+    [SerializeField] private Animator animator;
+
+    [Header("Cooldown")]
+    public UnityEvent CooldownStart;
 
     private void Awake()
     {
-        // legs = GameObject.Find("Legs");
-        // animator = legs.GetComponent<Animator>();
-        kickCountdown = maxKickCountdown;
+        legs = GameObject.Find("Legs");
+        animator = legs.GetComponent<Animator>();
     }
 
     private void Update()
@@ -26,18 +23,14 @@ public class Kicking : MonoBehaviour
 
     void CanKick()
     {
-        if (CombatManager.Instance.attackMethod == "No Weapon" && canAttack)
+        if (!CombatManager.Instance.weaponEquipped && CombatManager.Instance.canAttack)
         {
-            //if (PlayerInputHandler.Instance.KickTriggered)
-            //{
-                
-            //}
+            if (PlayerInputHandler.Instance.kickAction.WasPressedThisFrame())
+            {
+                CombatManager.Instance.canAttack = false;
+                animator.SetTrigger("Attack");
+                CooldownStart.Invoke();
+            }
         }
-    }
-
-    private void PunchAttack1()
-    {
-        canAttack = false;
-        kickCountdown = maxKickCountdown;
     }
 }

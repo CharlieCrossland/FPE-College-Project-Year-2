@@ -5,15 +5,13 @@ public class CombatManager : MonoBehaviour
 {
     public static CombatManager Instance;
 
-    public string attackMethod;
-    public string currentWeapon;
-    public GameObject currentWeaponOBJ;
-    private bool weaponDetected;
-    public bool setWeapon;
+    [Header("Detect Weapon")]
+    public bool weaponEquipped;
 
     [Header("Cooldown")]
     public bool canAttack;
-    private float attackCD = 1.0f;
+    private float punchCD = 0.55f;
+    private float kickCD = 1.0f;
 
     // weapons available
     public GameObject TestWeaponOBJ;
@@ -22,44 +20,37 @@ public class CombatManager : MonoBehaviour
     {
         Instance = this;
         canAttack = true;
-
-        DetectWeapon();
     }
 
-    public void WeaponPickUp()
+    public void PunchCooldown()
     {
-        if (weaponDetected == false)
-        {
-            DetectWeapon();
-            if (currentWeapon == null)
-            {
-                currentWeapon = new string("No Weapon");
-            }
-        }
+        StartCoroutine(ResetPunchCD());
     }
 
-    private void DetectWeapon()
+    IEnumerator ResetPunchCD()
     {
-        switch (currentWeapon)
-        {
-            case "TestWeapon":
-                attackMethod = "Weapon";
-                setWeapon = true;
-                currentWeaponOBJ = TestWeaponOBJ;
-                weaponDetected = true;
-                break;
-        }
-    }
-
-    public void StartCooldown()
-    {
-        StartCoroutine(ResetAttackCD());
-    }
-
-    IEnumerator ResetAttackCD()
-    {
-        yield return new WaitForSeconds(attackCD);
+        yield return new WaitForSeconds(punchCD);
         canAttack = true;
         yield break;
+    }
+
+    public void KickCooldown()
+    {
+        StartCoroutine(ResetKickCD());
+    }
+
+    IEnumerator ResetKickCD()
+    {
+        yield return new WaitForSeconds(kickCD);
+        canAttack = true;
+        yield break;
+    }
+
+    public void Drop()
+    {
+        if (PlayerInputHandler.Instance.DropTriggered && weaponEquipped == true)
+        {
+            CombatManager.Instance.weaponEquipped = false;
+        }
     }
 }

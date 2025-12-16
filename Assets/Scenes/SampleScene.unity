@@ -445,6 +445,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: TestWeapon
   PlayerHand: {fileID: 893330976}
+  animator: {fileID: 815931474}
+  CooldownStart:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2116718461}
+        m_TargetAssemblyTypeName: CombatManager, Assembly-CSharp
+        m_MethodName: PunchCooldown
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!136 &815931470
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -758,6 +774,26 @@ MonoBehaviour:
   sprint: Sprint
   interact: Interact
   attack: Attack
+  kick: Kick
+  drop: Drop
+  attackAction:
+    m_Name: 
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: ecaa4bfe-0fd1-4783-85fc-9d6f4396181b
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  kickAction:
+    m_Name: 
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 06f5981c-489c-4992-9f81-408758c9cb36
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!4 &1915017440
 Transform:
   m_ObjectHideFlags: 0
@@ -773,36 +809,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2116718457 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8302340725404205071, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
-  m_PrefabInstance: {fileID: 5427134595761864686}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2116718461 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6319459038232097282, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
   m_PrefabInstance: {fileID: 5427134595761864686}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2116718457}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4257e17ed607fc94995a9029e8a2aa73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2116718462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2116718457}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 298a9756e88a4f147b6d9e2722516048, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 0}
-  legs: {fileID: 0}
 --- !u!1001 &5427134595761864686
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -811,34 +828,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1923995164118600653, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
-      propertyPath: CooldownStart.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1923995164118600653, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
-      propertyPath: CooldownStart.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1923995164118600653, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
-      propertyPath: CooldownStart.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 2116718461}
-    - target: {fileID: 1923995164118600653, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
-      propertyPath: CooldownStart.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1923995164118600653, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
-      propertyPath: CooldownStart.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: StartCooldown
-      objectReference: {fileID: 0}
-    - target: {fileID: 1923995164118600653, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
-      propertyPath: CooldownStart.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: CombatManager, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 1923995164118600653, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
-      propertyPath: CooldownStart.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 4252516259762114688, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -879,34 +868,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4434277391073697740, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.119
-      objectReference: {fileID: 0}
-    - target: {fileID: 4434277391073697740, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.411
-      objectReference: {fileID: 0}
-    - target: {fileID: 4544290388199917671, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6256525895684894413, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.431
-      objectReference: {fileID: 0}
-    - target: {fileID: 6256525895684894413, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.334
-      objectReference: {fileID: 0}
     - target: {fileID: 6319459038232097282, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
       propertyPath: TestWeaponOBJ
       value: 
       objectReference: {fileID: 815931468}
-    - target: {fileID: 7536336823345723972, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.4
-      objectReference: {fileID: 0}
     - target: {fileID: 7545004501562855522, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
       propertyPath: m_Name
       value: --- PLAYER ---
@@ -914,10 +879,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8302340725404205071, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
-      insertIndex: 3
-      addedObject: {fileID: 2116718462}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

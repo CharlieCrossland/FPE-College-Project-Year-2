@@ -13,7 +13,7 @@ public class Punch : MonoBehaviour
     [SerializeField] private GameObject fist;
     private int punchCounter;
     private float punchCountdown;
-    readonly private float maxPunchCountdown = 2f;
+    readonly private float maxPunchCountdown = 1f; // cant be less than attack cooldown
     private bool startPunchCounterManager;
 
     private void Awake()
@@ -25,30 +25,36 @@ public class Punch : MonoBehaviour
 
     private void Update()
     {
+        IsWeaponEquipped();
         CanPunch();
         PunchCounterManager();
     }
 
+    void IsWeaponEquipped()
+    {
+        // if the player does not have a weapon enable fists and allow for punching
+        if (!CombatManager.Instance.weaponEquipped)
+        {
+            fist.SetActive(true);
+        }
+        else
+        {
+            fist.SetActive(false);
+        }
+    }
+
     void CanPunch()
     {
-        if (CombatManager.Instance.attackMethod == "" && CombatManager.Instance.canAttack == true)
+        if (!CombatManager.Instance.weaponEquipped && CombatManager.Instance.canAttack == true)
         {
-            if (PlayerInputHandler.Instance.AttackTriggered)
+            if (PlayerInputHandler.Instance.attackAction.WasPressedThisFrame())
             {
                 startPunchCounterManager = true;
                 DetectPunchAttackSequence();
             }
         }
-
-        if (CombatManager.Instance.attackMethod != "")
-        {
-            fist.SetActive(false);
-        }
-        else
-        {
-            fist.SetActive(true);
-        }
     }
+
 
     // can possibly change this to be used with all attacks
     // find animator of current attack 
