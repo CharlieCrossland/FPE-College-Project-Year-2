@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Events;
 
+#pragma warning disable IDE0044 // disables "make this field readonly" message
 public class TestWeapon : MonoBehaviour, IInteractable
 {
     public string weaponName = "TestWeapon";
