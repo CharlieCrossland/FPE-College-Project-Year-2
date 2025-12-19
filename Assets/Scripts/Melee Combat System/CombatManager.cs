@@ -50,7 +50,7 @@ public class CombatManager : MonoBehaviour
     {
         if (PlayerInputHandler.Instance.DropTriggered && weaponEquipped == true)
         {
-            CombatManager.Instance.weaponEquipped = false;
+            weaponEquipped = false;
         }
     }
 }
