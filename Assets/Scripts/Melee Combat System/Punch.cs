@@ -16,6 +16,11 @@ public class Punch : MonoBehaviour
     readonly private float maxPunchCountdown = 1f; // cant be less than attack cooldown
     private bool startPunchCounterManager;
 
+    [Header("Raycasts")]
+    RaycastHit hit;
+    [SerializeField] private LayerMask layerMask;
+    private bool sendRayCast;
+
     private void Awake()
     {
         fist = GameObject.Find("Fists");
@@ -28,6 +33,11 @@ public class Punch : MonoBehaviour
         IsWeaponEquipped();
         CanPunch();
         PunchCounterManager();
+    }
+
+    private void FixedUpdate()
+    {
+        SendRay();
     }
 
     void IsWeaponEquipped()
@@ -88,7 +98,24 @@ public class Punch : MonoBehaviour
         punchCountdown = maxPunchCountdown;
         punchCounter =+ 1;
         animator.SetTrigger("Punch1");
+        sendRayCast = true;
         CooldownStart.Invoke();
+    }
+
+    private void SendRay()
+    {
+        if (sendRayCast)
+        {
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity, layerMask))
+            {
+                sendRayCast = false;
+            }
+            else
+            {
+                sendRayCast = false;
+            }
+            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.yellow);
+        }
     }
 
     private void PunchAttack2()

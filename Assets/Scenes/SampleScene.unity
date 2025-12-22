@@ -446,21 +446,6 @@ MonoBehaviour:
   weaponName: TestWeapon
   PlayerHand: {fileID: 893330976}
   animator: {fileID: 815931474}
-  CooldownStart:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2116718461}
-        m_TargetAssemblyTypeName: CombatManager, Assembly-CSharp
-        m_MethodName: PunchCooldown
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!136 &815931470
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -809,17 +794,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2116718461 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6319459038232097282, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
-  m_PrefabInstance: {fileID: 5427134595761864686}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4257e17ed607fc94995a9029e8a2aa73, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &5427134595761864686
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -828,6 +802,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1923995164118600653, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 4252516259762114688, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
