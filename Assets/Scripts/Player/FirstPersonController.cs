@@ -1,5 +1,7 @@
 using UnityEngine;
 using Unity.Cinemachine;
+using Unity.VisualScripting;
+using System.Collections;
 
 // add components needed for script to work
 // prevents compile errors
@@ -9,6 +11,14 @@ public class FirstPersonController : MonoBehaviour
     [Header("Movement Speeds")]
     [SerializeField] private float walkSpeed = 3.0f;
     [SerializeField] private float sprintMultiplier = 2.0f;
+
+    [Header("Stamina")]
+    [SerializeField] private float currentStamina;
+    [SerializeField] private float maxStamina = 100f;
+    [SerializeField] private float staminaIncreaseMultiplier = 1f;
+    [SerializeField] private float staminaDecreaseMultiplier = 1f;
+    [SerializeField] private bool startStaminaIncrease;
+    [SerializeField] private bool canSprint;
 
     [Header("Jump Parameters")]
     [SerializeField] private float jumpForce = 5.0f;
@@ -31,6 +41,7 @@ public class FirstPersonController : MonoBehaviour
     private void Awake()
     {
         CheckReferences();
+        StaminaValueSet();
     }
 
     private void CheckReferences()
@@ -58,6 +69,11 @@ public class FirstPersonController : MonoBehaviour
         return true;
     }
 
+    private void StaminaValueSet()
+    {
+        currentStamina = maxStamina;
+    }
+
     void Start()
     {
         SetCursor();
@@ -73,6 +89,7 @@ public class FirstPersonController : MonoBehaviour
     {
         HandleMovement();
         HandleRotation();
+        Stamina();
     }
     
     private Vector3 CalculateWorldDirection()
@@ -111,7 +128,7 @@ public class FirstPersonController : MonoBehaviour
         currentMovement.x = worldDirection.x * CurrentSpeed;
         currentMovement.z = worldDirection.z * CurrentSpeed;
 
-        // i dont like the fact HandleJumping is so hidden and nested lmao
+        // i dont like the fact the HandleJumping method is so nested lmao
         HandleJumping();
         
         characterController.Move(currentMovement * Time.deltaTime);
@@ -136,5 +153,69 @@ public class FirstPersonController : MonoBehaviour
         ApplyHorizontalRotation(mouseXRotation);
         ApplyVerticalRotation(mouseYRotation);        
     }
-    
+
+    private void Stamina()
+    {
+        if (PlayerInputHandler.Instance.SprintTriggered && canSprint == true)
+        {
+            sprintMultiplier = 2f;
+
+            currentStamina -= staminaDecreaseMultiplier;
+
+            // after letting go of sprint then increase current stamina
+        }
+        else
+        {
+            // keeps walk speed as original value
+            sprintMultiplier = 1f;
+
+            StaminaIncrease();
+            // StartCoroutine(StartStaminaIncrease());
+        }
+
+        StaminaCap();
+    }
+
+    private void StaminaIncrease()
+    {
+        if (startStaminaIncrease)
+        {
+            currentStamina += staminaIncreaseMultiplier;
+        }
+    }
+
+    //IEnumerator StartStaminaIncrease()
+    //{
+    //    yield return new WaitForSeconds(3f);
+    //    currentStamina += staminaIncreaseMultiplier;
+
+    //    if ((PlayerInputHandler.Instance.SprintTriggered && canSprint == true) || currentStamina == maxStamina)
+    //    {
+    //        yield break;
+    //    }
+    //}
+
+    private void StaminaCap()
+    {
+        // stops stamina going above max stamina
+        if (currentStamina >= maxStamina)
+        {
+            currentStamina = maxStamina;
+            startStaminaIncrease = false;
+        }
+
+        // stops current stamina going below 0
+        if (currentStamina <= 0)
+        {
+            currentStamina = 0;
+            canSprint = false;
+            PlayerInputHandler.Instance.SprintTriggered = false;
+            startStaminaIncrease = true;
+        }
+
+        if (currentStamina > 25)
+        {
+            canSprint = true;
+        }
+    }
 }
