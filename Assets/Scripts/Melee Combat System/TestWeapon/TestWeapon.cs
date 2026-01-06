@@ -7,6 +7,7 @@ public class TestWeapon : MonoBehaviour, IInteractable
 {
     public string weaponName = "TestWeapon";
     [SerializeField] private Transform PlayerHand;
+    private bool inHand;
 
     [Header("Attacking")]
     [SerializeField] private Animator animator;
@@ -16,14 +17,21 @@ public class TestWeapon : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        CombatManager.Instance.weaponEquipped = true;
+        if (!CombatManager.Instance.weaponEquipped)
+        {
+            inHand = true;
+            CombatManager.Instance.weaponEquipped = true;
+        }
     }
 
     private void Update()
     {
-        if (CombatManager.Instance.weaponEquipped == true)
+        if (inHand)
         {
-            transform.SetPositionAndRotation(PlayerHand.transform.position, PlayerHand.transform.rotation);
+            //transform.SetPositionAndRotation(PlayerHand.transform.position, PlayerHand.transform.rotation);
+
+            transform.localPosition = PlayerHand.transform.position;
+            transform.localRotation = PlayerHand.transform.rotation;
             transform.SetParent(PlayerHand);
 
             Attacking();
@@ -57,6 +65,7 @@ public class TestWeapon : MonoBehaviour, IInteractable
         if (PlayerInputHandler.Instance.DropTriggered && CombatManager.Instance.canAttack)
         {
             CombatManager.Instance.weaponEquipped = false;
+            inHand = false;
         }
     }
 }

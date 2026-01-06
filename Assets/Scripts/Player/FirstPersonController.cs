@@ -1,7 +1,6 @@
 using UnityEngine;
 using Unity.Cinemachine;
-using Unity.VisualScripting;
-using System.Collections;
+using UnityEngine.UI;
 
 // add components needed for script to work
 // prevents compile errors
@@ -15,10 +14,12 @@ public class FirstPersonController : MonoBehaviour
     [Header("Stamina")]
     [SerializeField] private float currentStamina;
     [SerializeField] private float maxStamina = 100f;
-    [SerializeField] private float staminaIncreaseMultiplier = 1f;
-    [SerializeField] private float staminaDecreaseMultiplier = 1f;
+    [SerializeField] private float staminaIncreaseMultiplier = 0.2f;
+    [SerializeField] private float staminaDecreaseMultiplier = 0.4f;
     [SerializeField] private bool startStaminaIncrease;
     [SerializeField] private bool canSprint;
+    [SerializeField] private Slider staminaSlider;
+    [SerializeField] private Image staminaSliderFill;
 
     [Header("Jump Parameters")]
     [SerializeField] private float jumpForce = 5.0f;
@@ -31,6 +32,10 @@ public class FirstPersonController : MonoBehaviour
     [Header("References")]
     [SerializeField] private CharacterController characterController;
     [SerializeField] private CinemachineCamera mainCamera;
+
+    [Header("Colours")]
+    private Color red = new Color(1, 0, 0);
+    private Color green = new Color(0, 1, 0);
 
     private Vector3 currentMovement;
     private float verticalRotation;
@@ -72,6 +77,9 @@ public class FirstPersonController : MonoBehaviour
     private void StaminaValueSet()
     {
         currentStamina = maxStamina;
+        staminaSlider.maxValue = maxStamina;
+
+        staminaSliderFill.color = green;
     }
 
     void Start()
@@ -161,19 +169,21 @@ public class FirstPersonController : MonoBehaviour
             sprintMultiplier = 2f;
 
             currentStamina -= staminaDecreaseMultiplier;
-
-            // after letting go of sprint then increase current stamina
         }
         else
         {
+            // use else for anything that isnt sprint and bool canSprint true
             // keeps walk speed as original value
             sprintMultiplier = 1f;
+            startStaminaIncrease = true;
 
             StaminaIncrease();
-            // StartCoroutine(StartStaminaIncrease());
         }
 
+        staminaSlider.value = currentStamina;
+
         StaminaCap();
+        StaminaSliderColourChange();
     }
 
     private void StaminaIncrease()
@@ -183,17 +193,6 @@ public class FirstPersonController : MonoBehaviour
             currentStamina += staminaIncreaseMultiplier;
         }
     }
-
-    //IEnumerator StartStaminaIncrease()
-    //{
-    //    yield return new WaitForSeconds(3f);
-    //    currentStamina += staminaIncreaseMultiplier;
-
-    //    if ((PlayerInputHandler.Instance.SprintTriggered && canSprint == true) || currentStamina == maxStamina)
-    //    {
-    //        yield break;
-    //    }
-    //}
 
     private void StaminaCap()
     {
@@ -216,6 +215,18 @@ public class FirstPersonController : MonoBehaviour
         if (currentStamina > 25)
         {
             canSprint = true;
+        }
+    }
+
+    private void StaminaSliderColourChange()
+    {
+        if (currentStamina < 25)
+        {
+            staminaSliderFill.color = red;
+        }
+        else
+        {
+            staminaSliderFill.color = green;
         }
     }
 }

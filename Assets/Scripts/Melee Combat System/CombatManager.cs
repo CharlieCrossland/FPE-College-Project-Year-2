@@ -45,12 +45,4 @@ public class CombatManager : MonoBehaviour
         canAttack = true;
         yield break;
     }
-
-    public void Drop()
-    {
-        if (PlayerInputHandler.Instance.DropTriggered && weaponEquipped == true)
-        {
-            weaponEquipped = false;
-        }
-    }
 }
