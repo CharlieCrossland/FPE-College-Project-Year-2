@@ -130,8 +130,7 @@ GameObject:
   - component: {fileID: 58968012}
   - component: {fileID: 58968011}
   - component: {fileID: 58968013}
-  - component: {fileID: 58968014}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TestWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -156,6 +155,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 1
+  gravity: 0.1
 --- !u!4 &58968012
 Transform:
   m_ObjectHideFlags: 0
@@ -172,35 +172,8 @@ Transform:
   - {fileID: 815931473}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &58968013
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 58968010}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 1
---- !u!64 &58968014
-MeshCollider:
+--- !u!136 &58968013
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -214,13 +187,14 @@ MeshCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  serializedVersion: 2
+  m_Radius: 0.11
+  m_Height: 1
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &184125187
 GameObject:
   m_ObjectHideFlags: 0
@@ -600,7 +574,7 @@ GameObject:
   - component: {fileID: 815931471}
   - component: {fileID: 815931470}
   - component: {fileID: 815931474}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1461,6 +1435,18 @@ PrefabInstance:
       propertyPath: layerMask.m_Bits
       value: 4294967295
       objectReference: {fileID: 0}
+    - target: {fileID: 2631925453890515772, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2952153498539530104, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3353926494542895285, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3525221139329083161, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
       propertyPath: InteractRange
       value: 5
@@ -1505,6 +1491,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5206461698659225831, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5258958485708526331, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 5967245522122162182, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
       propertyPath: walkSpeed
       value: 2.5
@@ -1537,9 +1531,29 @@ PrefabInstance:
       propertyPath: TestWeaponOBJ
       value: 
       objectReference: {fileID: 815931468}
+    - target: {fileID: 6689105790388786241, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7545004501562855522, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
       propertyPath: m_Name
       value: --- PLAYER ---
+      objectReference: {fileID: 0}
+    - target: {fileID: 7545004501562855522, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7552175841775099878, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8273235926515800073, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8302340725404205071, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

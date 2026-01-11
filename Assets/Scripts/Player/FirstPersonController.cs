@@ -34,8 +34,8 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private CinemachineCamera mainCamera;
 
     [Header("Colours")]
-    private Color red = new Color(1, 0, 0);
-    private Color green = new Color(0, 1, 0);
+    private Color red = new (1, 0, 0);
+    private Color green = new (0, 1, 0);
 
     private Vector3 currentMovement;
     private float verticalRotation;
