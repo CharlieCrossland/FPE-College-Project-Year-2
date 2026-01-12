@@ -23,7 +23,7 @@ public class Kicking : MonoBehaviour
 
     void CanKick()
     {
-        if (!CombatManager.Instance.weaponEquipped && CombatManager.Instance.canAttack)
+        if (CombatManager.Instance.canAttack)
         {
             if (PlayerInputHandler.Instance.kickAction.WasPressedThisFrame())
             {

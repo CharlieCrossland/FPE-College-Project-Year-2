@@ -1,15 +1,11 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
-using static UnityEditor.PlayerSettings;
 
 #pragma warning disable IDE0044 // disables "make this field readonly" message
-public class TestWeapon : MonoBehaviour, IInteractable
+public class WeaponScript : MonoBehaviour, IInteractable
 {
-    public string weaponName = "TestWeapon";
+    public string weaponName = "Test Weapon";
     [SerializeField] private Transform PlayerHand;
-    private bool inHand;
-    private bool weaponDropped;
 
     [Header("Animations")]
     [SerializeField] private Animator animator;
@@ -22,10 +18,17 @@ public class TestWeapon : MonoBehaviour, IInteractable
     private RaycastHit hit;
     private bool onFloor;
     [SerializeField] private float gravity = 2f;
+    private bool weaponDropped;
+    private bool inHand;
+
+    [Header("Weapon Variables")]
+    public float Damage;
+    public float AttackSpeed;
+    public float Durability;
+
 
     public void Interact()
     {
-        Debug.Log("Interact:TestWeapon");
         if (!CombatManager.Instance.weaponEquipped)
         {
             inHand = true;
@@ -37,25 +40,27 @@ public class TestWeapon : MonoBehaviour, IInteractable
     {
         if (inHand)
         {
-            //transform.SetPositionAndRotation(PlayerHand.transform.position, PlayerHand.transform.rotation);
-
-            transform.position = PlayerHand.transform.position;
-            transform.rotation = PlayerHand.transform.rotation;
-            transform.SetParent(PlayerHand);
-
-            animator.SetBool("Idle", false);
-            onFloor = false;
-            weaponDropped = false;
-
-            Attacking();
-            Drop();
+            InHand();
         }
         else
         {
             NotInHand();
         }
 
-        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * 0.2f, Color.green);
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * 0.3f, Color.green);
+    }
+
+    private void InHand()
+    {
+        transform.SetPositionAndRotation(PlayerHand.transform.position, PlayerHand.transform.rotation);
+        transform.SetParent(PlayerHand);
+
+        animator.SetBool("Idle", false);
+        onFloor = false;
+        weaponDropped = false;
+
+        Attacking();
+        Drop();
     }
 
     private void NotInHand()
@@ -64,11 +69,13 @@ public class TestWeapon : MonoBehaviour, IInteractable
         {
             StartCoroutine(SetFloorPosition());
         }
+        // If the weapon has not been dropped and is not in the players hand, it must be on the floor.
         else if (weaponDropped == false && inHand == false)
         {
             onFloor = true;
         }
 
+        // when hitting the floor, it will now remain static and play idle animation on model
         if (onFloor)
         {
             animator.SetBool("Idle", true);
@@ -78,13 +85,14 @@ public class TestWeapon : MonoBehaviour, IInteractable
     IEnumerator SetFloorPosition()
     {
         transform.SetParent(null);
-        transform.rotation = new Quaternion(0.70711f, 0f, 0f, -0.7071036f);
-        transform.position = PlayerHand.transform.position;
+        transform.rotation = new Quaternion(0f, FirstPersonController.Instance.mouseYRotation, 0f, 1);
+        // transform.position = PlayerHand.transform.position;
+        
 
-        Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 0.2f, layerMask);
+        Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 0.3f, layerMask);
 
         // use minus one to move object down and times by gravity
-        transform.position += new Vector3(transform.position.x,-1 * gravity, transform.position.z);
+        transform.position += new Vector3(0, -gravity * Time.deltaTime, 0);
 
         if (hit.collider)
         {

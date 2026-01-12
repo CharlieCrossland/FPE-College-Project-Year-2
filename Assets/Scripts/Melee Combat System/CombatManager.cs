@@ -13,8 +13,6 @@ public class CombatManager : MonoBehaviour
     private float punchCD = 0.55f;
     private float kickCD = 1.0f;
 
-    // weapons available
-    public GameObject TestWeaponOBJ;
 
     private void Awake()
     {

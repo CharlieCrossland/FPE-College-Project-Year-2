@@ -7,6 +7,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(CharacterController))]
 public class FirstPersonController : MonoBehaviour
 {
+    public static FirstPersonController Instance;
+
     [Header("Movement Speeds")]
     [SerializeField] private float walkSpeed = 3.0f;
     [SerializeField] private float sprintMultiplier = 2.0f;
@@ -47,6 +49,8 @@ public class FirstPersonController : MonoBehaviour
     {
         CheckReferences();
         StaminaValueSet();
+
+        Instance = this;
     }
 
     private void CheckReferences()
@@ -152,11 +156,12 @@ public class FirstPersonController : MonoBehaviour
         verticalRotation = Mathf.Clamp(verticalRotation - rotationAmount, -upDownLookRange, upDownLookRange);
         mainCamera.transform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
     }
-    
+
+    public float mouseYRotation;    
     private void HandleRotation()
     {
         float mouseXRotation = PlayerInputHandler.Instance.RotationInput.x * mouseSensitivity;
-        float mouseYRotation = PlayerInputHandler.Instance.RotationInput.y * mouseSensitivity;
+        mouseYRotation = PlayerInputHandler.Instance.RotationInput.y * mouseSensitivity;
         
         ApplyHorizontalRotation(mouseXRotation);
         ApplyVerticalRotation(mouseYRotation);        
@@ -168,7 +173,7 @@ public class FirstPersonController : MonoBehaviour
         {
             sprintMultiplier = 2f;
 
-            currentStamina -= staminaDecreaseMultiplier;
+            currentStamina -= (staminaDecreaseMultiplier * Time.deltaTime);
         }
         else
         {
@@ -190,7 +195,7 @@ public class FirstPersonController : MonoBehaviour
     {
         if (startStaminaIncrease)
         {
-            currentStamina += staminaIncreaseMultiplier;
+            currentStamina += (staminaIncreaseMultiplier * Time.deltaTime);
         }
     }
 

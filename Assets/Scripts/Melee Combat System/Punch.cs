@@ -15,8 +15,10 @@ public class Punch : MonoBehaviour
     private float punchCountdown;
     readonly private float maxPunchCountdown = 1f; // cant be less than attack cooldown
     private bool startPunchCounterManager;
+    [SerializeField] private float punchRange;
 
     [Header("Raycasts")]
+    [SerializeField] private Transform raySource;
     RaycastHit hit;
     [SerializeField] private LayerMask layerMask;
     private bool sendRayCast;
@@ -106,7 +108,8 @@ public class Punch : MonoBehaviour
     {
         if (sendRayCast)
         {
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity, layerMask))
+            Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
+            if (Physics.Raycast(r, out hit, punchRange, layerMask))
             {
                 sendRayCast = false;
             }
