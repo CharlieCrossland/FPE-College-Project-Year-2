@@ -21,7 +21,9 @@ public class Punch : MonoBehaviour
     [SerializeField] private Transform raySource;
     RaycastHit hit;
     [SerializeField] private LayerMask layerMask;
+
     private bool sendBasicPunchRay;
+    private bool sendHookPunchRay;
 
     private EnemyHealth enemyHealth;
 
@@ -42,6 +44,7 @@ public class Punch : MonoBehaviour
     private void FixedUpdate()
     {
         BasicPunchRay();
+        HookPunchRay();
     }
 
     void IsWeaponEquipped()
@@ -81,22 +84,22 @@ public class Punch : MonoBehaviour
         switch (punchCounter)
         {
             case 0:
-                PunchAttack1();
+                LeftJab();
                 break;
             case 1:
-                PunchAttack2();
+                RightJab();
                 break;
             case 2:
-                PunchAttack3();
+                RightHook();
                 break;
             case 3:
-                PunchAttack4();
+                Uppercut();
                 break;
         }
          
     }
 
-    private void PunchAttack1()
+    private void LeftJab()
     {
         CombatManager.Instance.canAttack = false;
         punchCountdown = maxPunchCountdown;
@@ -106,44 +109,27 @@ public class Punch : MonoBehaviour
         CooldownStart.Invoke();
     }
 
-    private void BasicPunchRay()
-    {
-        if (sendBasicPunchRay)
-        {
-            Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
-            if (Physics.Raycast(r, out hit, punchRange, layerMask))
-            {
-                enemyHealth = hit.collider.gameObject.GetComponent<EnemyHealth>();
-                enemyHealth.BasicPunch();
-                sendBasicPunchRay = false;
-            }
-            else
-            {
-                sendBasicPunchRay = false;
-            }
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.yellow);
-        }
-    }
-
-    private void PunchAttack2()
+    private void RightJab()
     {
         CombatManager.Instance.canAttack = false;
         punchCountdown = maxPunchCountdown;
         punchCounter =+ 2;
         animator.SetTrigger("Punch2");
+        sendBasicPunchRay = true;
         CooldownStart.Invoke();
     }
 
-    private void PunchAttack3()
+    private void RightHook()
     {
         CombatManager.Instance.canAttack = false;
         punchCountdown = maxPunchCountdown;
         punchCounter =+ 3;
         animator.SetTrigger("Punch3");
+        sendHookPunchRay = true;
         CooldownStart.Invoke();
     }
 
-    private void PunchAttack4()
+    private void Uppercut()
     {
         CombatManager.Instance.canAttack = false;
         punchCountdown = maxPunchCountdown;
@@ -180,5 +166,51 @@ public class Punch : MonoBehaviour
             punchCounter = 0;
             punchCountdown = maxPunchCountdown;
         }    
+    }
+
+    private void BasicPunchRay()
+    {
+        if (sendBasicPunchRay)
+        {
+            Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
+            if (Physics.Raycast(r, out hit, punchRange, layerMask))
+            {
+                // checking if enemy health is not null otherwise an error is thrown that the component is missing while it is trying to be accessed
+                enemyHealth = hit.collider.gameObject.GetComponent<EnemyHealth>();
+                if (enemyHealth != null)
+                {
+                    enemyHealth.BasicPunch();
+                }
+                sendBasicPunchRay = false;
+            }
+            else
+            {
+                sendBasicPunchRay = false;
+            }
+            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * punchRange, Color.yellow);
+        }
+    }
+
+    private void HookPunchRay()
+    {
+        if (sendHookPunchRay)
+        {
+            Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
+            if (Physics.Raycast(r, out hit, punchRange, layerMask))
+            {
+                // checking if enemy health is not null otherwise an error is thrown that the component is missing while it is trying to be accessed
+                enemyHealth = hit.collider.gameObject.GetComponent<EnemyHealth>();
+                if (enemyHealth != null)
+                {
+                    enemyHealth.HookPunch();
+                }
+                sendHookPunchRay = false;
+            }
+            else
+            {
+                sendHookPunchRay = false;
+            }
+            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * punchRange, Color.yellow);
+        }
     }
 }
