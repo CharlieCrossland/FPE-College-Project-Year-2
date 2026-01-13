@@ -10,7 +10,7 @@ public class Punch : MonoBehaviour
     public UnityEvent CooldownStart;
 
     [Header("Punch")]
-    [SerializeField] private GameObject fist;
+    [SerializeField] private GameObject hands;
     private int punchCounter;
     private float punchCountdown;
     readonly private float maxPunchCountdown = 1f; // cant be less than attack cooldown
@@ -25,8 +25,7 @@ public class Punch : MonoBehaviour
 
     private void Awake()
     {
-        fist = GameObject.Find("Fists");
-        animator = fist.GetComponent<Animator>();
+        animator = hands.GetComponentInChildren<Animator>();
         punchCountdown = maxPunchCountdown;
     }
 
@@ -47,11 +46,11 @@ public class Punch : MonoBehaviour
         // if the player does not have a weapon enable fists and allow for punching
         if (!CombatManager.Instance.weaponEquipped)
         {
-            fist.SetActive(true);
+            hands.SetActive(true);
         }
         else
         {
-            fist.SetActive(false);
+            hands.SetActive(false);
         }
     }
 
