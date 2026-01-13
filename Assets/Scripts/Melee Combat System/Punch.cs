@@ -25,6 +25,7 @@ public class Punch : MonoBehaviour
 
     private void Awake()
     {
+        hands = GameObject.Find("Fists");
         animator = hands.GetComponentInChildren<Animator>();
         punchCountdown = maxPunchCountdown;
     }

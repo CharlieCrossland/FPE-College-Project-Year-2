@@ -13,7 +13,7 @@ public class Kicking : MonoBehaviour
     private void Awake()
     {
         legs = GameObject.Find("Legs");
-        animator = legs.GetComponent<Animator>();
+        animator = legs.GetComponentInChildren<Animator>();
     }
 
     private void Update()

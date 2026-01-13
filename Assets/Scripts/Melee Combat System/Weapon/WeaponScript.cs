@@ -20,6 +20,7 @@ public class WeaponScript : MonoBehaviour, IInteractable
     [SerializeField] private float gravity = 2f;
     private bool weaponDropped;
     private bool inHand;
+    private float distance = 0.35f;
 
     [Header("Weapon Variables")]
     public float Damage;
@@ -47,7 +48,7 @@ public class WeaponScript : MonoBehaviour, IInteractable
             NotInHand();
         }
 
-        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * 0.3f, Color.green);
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * distance, Color.green);
     }
 
     private void InHand()
@@ -85,11 +86,11 @@ public class WeaponScript : MonoBehaviour, IInteractable
     IEnumerator SetFloorPosition()
     {
         transform.SetParent(null);
-        transform.rotation = new Quaternion(0f, FirstPersonController.Instance.mouseYRotation, 0f, 1);
+        transform.rotation = new Quaternion(0f, 0f, 0f, 1);
         // transform.position = PlayerHand.transform.position;
         
 
-        Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 0.3f, layerMask);
+        Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, distance, layerMask);
 
         // use minus one to move object down and times by gravity
         transform.position += new Vector3(0, -gravity * Time.deltaTime, 0);
@@ -98,7 +99,12 @@ public class WeaponScript : MonoBehaviour, IInteractable
         {
             weaponDropped = false;
             onFloor = true;
+            gravity = 2f;
             yield break;
+        }
+        else
+        {
+            gravity += 0.5f;
         }
     }
 
