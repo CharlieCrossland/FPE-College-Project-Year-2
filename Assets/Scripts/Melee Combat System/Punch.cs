@@ -21,7 +21,9 @@ public class Punch : MonoBehaviour
     [SerializeField] private Transform raySource;
     RaycastHit hit;
     [SerializeField] private LayerMask layerMask;
-    private bool sendRayCast;
+    private bool sendBasicPunchRay;
+
+    private EnemyHealth enemyHealth;
 
     private void Awake()
     {
@@ -39,7 +41,7 @@ public class Punch : MonoBehaviour
 
     private void FixedUpdate()
     {
-        SendRay();
+        BasicPunchRay();
     }
 
     void IsWeaponEquipped()
@@ -100,22 +102,24 @@ public class Punch : MonoBehaviour
         punchCountdown = maxPunchCountdown;
         punchCounter =+ 1;
         animator.SetTrigger("Punch1");
-        sendRayCast = true;
+        sendBasicPunchRay = true;
         CooldownStart.Invoke();
     }
 
-    private void SendRay()
+    private void BasicPunchRay()
     {
-        if (sendRayCast)
+        if (sendBasicPunchRay)
         {
             Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
             if (Physics.Raycast(r, out hit, punchRange, layerMask))
             {
-                sendRayCast = false;
+                enemyHealth = hit.collider.gameObject.GetComponent<EnemyHealth>();
+                enemyHealth.BasicPunch();
+                sendBasicPunchRay = false;
             }
             else
             {
-                sendRayCast = false;
+                sendBasicPunchRay = false;
             }
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.yellow);
         }
