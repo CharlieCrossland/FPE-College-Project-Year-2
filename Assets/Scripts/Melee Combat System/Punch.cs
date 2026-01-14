@@ -24,6 +24,7 @@ public class Punch : MonoBehaviour
 
     private bool sendBasicPunchRay;
     private bool sendHookPunchRay;
+    private bool sendUppercutRay;
 
     private EnemyHealth enemyHealth;
 
@@ -45,6 +46,7 @@ public class Punch : MonoBehaviour
     {
         BasicPunchRay();
         HookPunchRay();
+        UppercutRay();
     }
 
     void IsWeaponEquipped()
@@ -135,6 +137,7 @@ public class Punch : MonoBehaviour
         punchCountdown = maxPunchCountdown;
         punchCounter =+ 3;
         animator.SetTrigger("Punch4");
+        sendUppercutRay = true;
         CooldownStart.Invoke();
         StartCoroutine(ResetPunchCombo());
     }
@@ -168,6 +171,7 @@ public class Punch : MonoBehaviour
         }    
     }
 
+    // MUST DELAY ALL RAYS TO BE IN LINE WITH PUNCHES
     private void BasicPunchRay()
     {
         if (sendBasicPunchRay)
@@ -175,7 +179,7 @@ public class Punch : MonoBehaviour
             Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
             if (Physics.Raycast(r, out hit, punchRange, layerMask))
             {
-                // checking if enemy health is not null otherwise an error is thrown that the component is missing while it is trying to be accessed
+                // checking if enemy health script is not null otherwise an error is thrown that the component is missing while it is trying to be accessed
                 enemyHealth = hit.collider.gameObject.GetComponent<EnemyHealth>();
                 if (enemyHealth != null)
                 {
@@ -198,7 +202,7 @@ public class Punch : MonoBehaviour
             Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
             if (Physics.Raycast(r, out hit, punchRange, layerMask))
             {
-                // checking if enemy health is not null otherwise an error is thrown that the component is missing while it is trying to be accessed
+                // checking if enemy health script is not null otherwise an error is thrown that the component is missing while it is trying to be accessed
                 enemyHealth = hit.collider.gameObject.GetComponent<EnemyHealth>();
                 if (enemyHealth != null)
                 {
@@ -209,6 +213,29 @@ public class Punch : MonoBehaviour
             else
             {
                 sendHookPunchRay = false;
+            }
+            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * punchRange, Color.yellow);
+        }
+    }
+
+    private void UppercutRay()
+    {
+        if (sendUppercutRay)
+        {
+            Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
+            if (Physics.Raycast(r, out hit, punchRange, layerMask))
+            {
+                // checking if enemy health script is not null otherwise an error is thrown that the component is missing while it is trying to be accessed
+                enemyHealth = hit.collider.gameObject.GetComponent<EnemyHealth>();
+                if (enemyHealth != null)
+                {
+                    enemyHealth.Uppercut();
+                }
+                sendUppercutRay = false;
+            }
+            else
+            {
+                sendUppercutRay = false;
             }
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * punchRange, Color.yellow);
         }

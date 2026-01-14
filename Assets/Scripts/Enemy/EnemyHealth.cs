@@ -3,26 +3,29 @@ using TMPro;
 
 public class EnemyHealth : MonoBehaviour
 {
-    public float health;
-    private float maxHealth;
-    private float noHealth = 0f;
+    [SerializeField] private float health;
+    public float maxHealth;
+    readonly private float noHealth = 0f;
 
     // knockback will move the enemy opposite to the direction of the punch
     private bool knockback;
-    private bool hookStun;
+    private bool stun;
+
+    private Animator animator;
 
     [Header("Debug")]
     [SerializeField] private TMP_Text healthText;
 
-    private void Start()
+    private void Awake()
     {
-        maxHealth = health;
+        animator = GetComponent<Animator>();
     }
 
     private void Update()
     {
         Health();
         DebugEnemyUI();
+        Stun();
     }
 
     private void Health()
@@ -42,11 +45,23 @@ public class EnemyHealth : MonoBehaviour
 
     public void HookPunch()
     {
-        hookStun = true;
+        stun = true;
 
-        if (hookStun)
+        health -= CombatManager.Instance.HookDMG;
+    }
+
+    public void Uppercut()
+    {
+        stun = true;
+
+        animator.SetTrigger("UppercutStun");
+    }
+
+    private void Stun()
+    {
+        if (stun)
         {
-            // stop movement shortly
+            // pause movement
         }
     }
 
