@@ -55,6 +55,8 @@ public class EnemyHealth : MonoBehaviour
         stun = true;
 
         animator.SetTrigger("UppercutStun");
+
+        health -= CombatManager.Instance.UppercutDMG;
     }
 
     private void Stun()

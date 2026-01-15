@@ -2849,15 +2849,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6319459038232097282, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
       propertyPath: HookDMG
-      value: 50
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6319459038232097282, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
       propertyPath: UppercutDMG
-      value: 100
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 6319459038232097282, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
       propertyPath: BasicPunchDMG
-      value: 25
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6332383977912457384, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
       propertyPath: m_Layer
