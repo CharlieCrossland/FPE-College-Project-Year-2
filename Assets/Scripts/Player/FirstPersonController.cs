@@ -14,7 +14,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float sprintMultiplier = 2.0f;
 
     [Header("Stamina")]
-    [SerializeField] private float currentStamina;
+    public float currentStamina;
     [SerializeField] private float maxStamina = 100f;
     [SerializeField] private float staminaIncreaseMultiplier = 0.2f;
     [SerializeField] private float staminaDecreaseMultiplier = 0.4f;

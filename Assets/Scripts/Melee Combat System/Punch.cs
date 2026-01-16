@@ -2,8 +2,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-
-#pragma warning disable CS0414 // disables this variable not in use crap in unity console
 public class Punch : MonoBehaviour
 {
     public static Punch Instance;
@@ -42,6 +40,7 @@ public class Punch : MonoBehaviour
         IsWeaponEquipped();
         CanPunch();
         PunchCounterManager();
+        SecretEmote();
     }
 
     void IsWeaponEquipped()
@@ -232,5 +231,29 @@ public class Punch : MonoBehaviour
                 yield break;
             }
         }
+    }
+
+    bool canSecretEmote;
+    private void SecretEmote()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+        {
+            StartCoroutine(SecretEmoteCountdown());
+        }
+
+        if (canSecretEmote && Input.GetKeyDown(KeyCode.Alpha7))
+        {
+            FirstPersonController.Instance.currentStamina = 0;
+            animator.SetTrigger("SecretEmote");
+            canSecretEmote = false;
+        }
+    }
+
+    IEnumerator SecretEmoteCountdown()
+    {
+        canSecretEmote = true;
+        yield return new WaitForSeconds(3f);
+        canSecretEmote = false;
+        yield break;
     }
 }

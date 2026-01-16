@@ -3,7 +3,7 @@ using TMPro;
 
 public class EnemyHealth : MonoBehaviour
 {
-    [SerializeField] private float health;
+    public float health;
     public float maxHealth;
     readonly private float noHealth = 0f;
 
@@ -35,6 +35,7 @@ public class EnemyHealth : MonoBehaviour
         {
             Debug.Log("Enemy Killed");
             health = noHealth;
+            Destroy(this);
         }
     }
 
