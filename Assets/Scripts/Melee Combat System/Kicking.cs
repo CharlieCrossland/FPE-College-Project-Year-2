@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -19,11 +20,12 @@ public class Kicking : MonoBehaviour
     private void Update()
     {
         CanKick();
+        RoundhouseKick();
     }
 
     void CanKick()
     {
-        if (CombatManager.Instance.canAttack)
+        if (CombatManager.Instance.canAttack && !Punch.Instance.rightJab)
         {
             if (PlayerInputHandler.Instance.kickAction.WasPressedThisFrame())
             {
@@ -32,5 +34,28 @@ public class Kicking : MonoBehaviour
                 CooldownStart.Invoke();
             }
         }
+    }
+
+    void RoundhouseKick()
+    {
+        if (Punch.Instance.rightJab == true)
+        {
+            StartCoroutine(RightJabCountdown());
+        }
+
+        if (CombatManager.Instance.canAttack && Punch.Instance.rightJab)
+        {
+            if (PlayerInputHandler.Instance.kickAction.WasPressedThisFrame())
+            {
+                Debug.Log("ROUNDHOUSE KICK");
+            }
+        }
+    }
+
+    IEnumerator RightJabCountdown()
+    {
+        yield return new WaitForSeconds(1.5f);
+        Punch.Instance.rightJab = false;
+        yield break;
     }
 }

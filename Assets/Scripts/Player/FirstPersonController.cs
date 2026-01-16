@@ -167,6 +167,11 @@ public class FirstPersonController : MonoBehaviour
         ApplyVerticalRotation(mouseYRotation);        
     }
 
+    private void Crouching()
+    {
+
+    }
+
     private void Stamina()
     {
         if (PlayerInputHandler.Instance.SprintTriggered && canSprint == true)

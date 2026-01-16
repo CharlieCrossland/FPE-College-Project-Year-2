@@ -6,6 +6,8 @@ using UnityEngine.Events;
 #pragma warning disable CS0414 // disables this variable not in use crap in unity console
 public class Punch : MonoBehaviour
 {
+    public static Punch Instance;
+
     [SerializeField] private Animator animator;
     public UnityEvent CooldownStart;
 
@@ -22,14 +24,14 @@ public class Punch : MonoBehaviour
     RaycastHit hit;
     [SerializeField] private LayerMask layerMask;
 
-    private bool sendBasicPunchRay;
-    private bool sendHookPunchRay;
-    private bool sendUppercutRay;
+    [Header("RoundhouseKick")]
+    [HideInInspector] public bool rightJab;
 
     private EnemyHealth enemyHealth;
 
     private void Awake()
     {
+        Instance = this;
         hands = GameObject.Find("Fists");
         animator = hands.GetComponentInChildren<Animator>();
         punchCountdown = maxPunchCountdown;
@@ -40,13 +42,6 @@ public class Punch : MonoBehaviour
         IsWeaponEquipped();
         CanPunch();
         PunchCounterManager();
-    }
-
-    private void FixedUpdate()
-    {
-        BasicPunchRay();
-        HookPunchRay();
-        UppercutRay();
     }
 
     void IsWeaponEquipped()
@@ -107,7 +102,7 @@ public class Punch : MonoBehaviour
         punchCountdown = maxPunchCountdown;
         punchCounter =+ 1;
         animator.SetTrigger("Punch1");
-        sendBasicPunchRay = true;
+        StartCoroutine(BasicPunchRay());
         CooldownStart.Invoke();
     }
 
@@ -117,7 +112,8 @@ public class Punch : MonoBehaviour
         punchCountdown = maxPunchCountdown;
         punchCounter =+ 2;
         animator.SetTrigger("Punch2");
-        sendBasicPunchRay = true;
+        rightJab = true;
+        StartCoroutine(BasicPunchRay());
         CooldownStart.Invoke();
     }
 
@@ -127,7 +123,7 @@ public class Punch : MonoBehaviour
         punchCountdown = maxPunchCountdown;
         punchCounter =+ 3;
         animator.SetTrigger("Punch3");
-        sendHookPunchRay = true;
+        StartCoroutine(HookPunchRay());
         CooldownStart.Invoke();
     }
 
@@ -137,7 +133,7 @@ public class Punch : MonoBehaviour
         punchCountdown = maxPunchCountdown;
         punchCounter =+ 3;
         animator.SetTrigger("Punch4");
-        sendUppercutRay = true;
+        StartCoroutine(UppercutRay());
         CooldownStart.Invoke();
         StartCoroutine(ResetPunchCombo());
     }
@@ -172,72 +168,69 @@ public class Punch : MonoBehaviour
     }
 
     // MUST DELAY ALL RAYS TO BE IN LINE WITH PUNCHES
-    private void BasicPunchRay()
+    IEnumerator BasicPunchRay()
     {
-        if (sendBasicPunchRay)
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * punchRange, Color.yellow);
+
+        Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
+        if (Physics.Raycast(r, out hit, punchRange, layerMask))
         {
-            Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
-            if (Physics.Raycast(r, out hit, punchRange, layerMask))
+            // checking if enemy health script is not null otherwise an error is thrown that the component is missing while it is trying to be accessed
+            enemyHealth = hit.collider.gameObject.GetComponent<EnemyHealth>();
+            if (enemyHealth != null)
             {
-                // checking if enemy health script is not null otherwise an error is thrown that the component is missing while it is trying to be accessed
-                enemyHealth = hit.collider.gameObject.GetComponent<EnemyHealth>();
-                if (enemyHealth != null)
-                {
-                    enemyHealth.BasicPunch();
-                }
-                sendBasicPunchRay = false;
+                yield return new WaitForSeconds(0.5f);
+                enemyHealth.BasicPunch();
+                yield break;
             }
             else
             {
-                sendBasicPunchRay = false;
+                yield break;
             }
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * punchRange, Color.yellow);
         }
     }
 
-    private void HookPunchRay()
+    private IEnumerator HookPunchRay()
     {
-        if (sendHookPunchRay)
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * punchRange, Color.yellow);
+
+        Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
+        if (Physics.Raycast(r, out hit, punchRange, layerMask))
         {
-            Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
-            if (Physics.Raycast(r, out hit, punchRange, layerMask))
+            // checking if enemy health script is not null otherwise an error is thrown that the component is missing while it is trying to be accessed
+            enemyHealth = hit.collider.gameObject.GetComponent<EnemyHealth>();
+            if (enemyHealth != null)
             {
-                // checking if enemy health script is not null otherwise an error is thrown that the component is missing while it is trying to be accessed
-                enemyHealth = hit.collider.gameObject.GetComponent<EnemyHealth>();
-                if (enemyHealth != null)
-                {
-                    enemyHealth.HookPunch();
-                }
-                sendHookPunchRay = false;
+                yield return new WaitForSeconds(0.5f);
+                enemyHealth.HookPunch();
+                yield break;
             }
             else
             {
-                sendHookPunchRay = false;
+                yield break;
             }
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * punchRange, Color.yellow);
         }
     }
 
-    private void UppercutRay()
+    private IEnumerator UppercutRay()
     {
-        if (sendUppercutRay)
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * punchRange, Color.yellow);
+
+        Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
+        if (Physics.Raycast(r, out hit, punchRange, layerMask))
         {
-            Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
-            if (Physics.Raycast(r, out hit, punchRange, layerMask))
+            // checking if enemy health script is not null otherwise an error is thrown that the component is missing while it is trying to be accessed
+            enemyHealth = hit.collider.gameObject.GetComponent<EnemyHealth>();
+            if (enemyHealth != null)
             {
-                // checking if enemy health script is not null otherwise an error is thrown that the component is missing while it is trying to be accessed
-                enemyHealth = hit.collider.gameObject.GetComponent<EnemyHealth>();
-                if (enemyHealth != null)
-                {
-                    enemyHealth.Uppercut();
-                }
-                sendUppercutRay = false;
+                yield return new WaitForSeconds(0.75f);
+                enemyHealth.Uppercut();
+                yield break;
             }
             else
             {
-                sendUppercutRay = false;
+                yield break;
             }
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * punchRange, Color.yellow);
         }
     }
 }
