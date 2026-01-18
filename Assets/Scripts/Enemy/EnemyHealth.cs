@@ -13,6 +13,9 @@ public class EnemyHealth : MonoBehaviour
 
     private Animator animator;
 
+    [Header("Knockback")]
+    [SerializeField] private Transform player;
+
     [Header("Debug")]
     [SerializeField] private TMP_Text healthText;
 
@@ -58,6 +61,18 @@ public class EnemyHealth : MonoBehaviour
         animator.SetTrigger("UppercutStun");
 
         health -= CombatManager.Instance.UppercutDMG;
+    }
+
+    public void SnapKick()
+    {
+        // find the distance between enemy and player
+        //Vector3 distance = transform.position.normalized - player.position.normalized;
+        // reverse the distance to be opposite of player
+        //Vector3 knockbackDirection = -distance;
+        //transform.position = knockbackDirection;
+
+        float opposite = -player.transform.rotation.y;
+        transform.position += new Vector3(opposite, 0, opposite);
     }
 
     private void Stun()

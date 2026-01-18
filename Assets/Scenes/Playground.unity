@@ -251,6 +251,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &695351374 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1680718533022797701, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
+  m_PrefabInstance: {fileID: 5427134595761864686}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &831245887
 GameObject:
   m_ObjectHideFlags: 0
@@ -806,6 +811,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3862781516889815204, guid: cd7eee43b15b9df488acb13942bae6f1, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1296612972}
     - target: {fileID: 6005584171424430807, guid: cd7eee43b15b9df488acb13942bae6f1, type: 3}
       propertyPath: player
       value: 
@@ -976,6 +985,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3290918660420453953, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
+      propertyPath: kickRange
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3290918660420453953, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
+      propertyPath: raySource
+      value: 
+      objectReference: {fileID: 695351374}
+    - target: {fileID: 3290918660420453953, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 3525221139329083161, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
       propertyPath: weaponTooltip
       value: 

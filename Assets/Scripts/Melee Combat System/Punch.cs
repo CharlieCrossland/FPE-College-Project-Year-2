@@ -166,7 +166,6 @@ public class Punch : MonoBehaviour
         }    
     }
 
-    // MUST DELAY ALL RAYS TO BE IN LINE WITH PUNCHES
     IEnumerator BasicPunchRay()
     {
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * punchRange, Color.yellow);
