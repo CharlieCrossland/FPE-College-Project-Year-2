@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,8 +8,10 @@ public class EnemyAI : MonoBehaviour
     public Transform player;
     private NavMeshAgent agent;
     private Animator animator;
+    private EnemyHealth enemyHealth;
 
     [Header("AI Settings")]
+    public float speed = 3.5f;
     public float detectionRange = 10f;
     public float patrolRadius = 15f;
     public float patrolWaitTime = 3f;
@@ -19,6 +22,7 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
+        enemyHealth = GetComponent<EnemyHealth>();
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
         SetNewPatrolPoint();
@@ -26,29 +30,47 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        if (!enemyHealth.stun)
+        {
+            agent.speed = speed;
 
-        // Determine behavior
-        if (distanceToPlayer <= detectionRange)
-        {
-            // Chase player
-            isPatrolling = false;
-            agent.SetDestination(player.position);
-        }
-        else
-        {
-            // Patrol mode
-            if (!isPatrolling)
+            float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+            // Determine behavior
+            if (distanceToPlayer <= detectionRange)
             {
-                isPatrolling = true;
-                SetNewPatrolPoint();
+                // Chase player
+                isPatrolling = false;
+                agent.SetDestination(player.position);
             }
-            Patrol();
+            else
+            {
+                // Patrol mode
+                if (!isPatrolling)
+                {
+                    isPatrolling = true;
+                    SetNewPatrolPoint();
+                }
+                Patrol();
+            }
+
+            // Update isMoving animation
+            bool moving = agent.velocity.magnitude > 0.2f;
+            animator.SetBool("isMoving", moving);
         }
 
-        // Update isMoving animation
-        bool moving = agent.velocity.magnitude > 0.2f;
-        animator.SetBool("isMoving", moving);
+        if (enemyHealth.stun)
+        {
+            agent.speed = 0f;
+            StartCoroutine(StunDisable());
+        }
+    }
+
+    IEnumerator StunDisable()
+    {
+        yield return new WaitForSeconds(1f);
+        enemyHealth.stun = false;
+        yield break;
     }
 
     void Patrol()

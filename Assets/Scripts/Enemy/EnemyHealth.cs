@@ -9,7 +9,7 @@ public class EnemyHealth : MonoBehaviour
 
     // knockback will move the enemy opposite to the direction of the punch
     private bool knockback;
-    private bool stun;
+    public bool stun; // stun handled in enemy ai script
 
     private Animator animator;
 
@@ -28,7 +28,6 @@ public class EnemyHealth : MonoBehaviour
     {
         Health();
         DebugEnemyUI();
-        Stun();
     }
 
     private void Health()
@@ -38,7 +37,8 @@ public class EnemyHealth : MonoBehaviour
         {
             Debug.Log("Enemy Killed");
             health = noHealth;
-            Destroy(this);
+            // play death animation and destroy object
+            Destroy(this.gameObject);
         }
     }
 
@@ -73,14 +73,6 @@ public class EnemyHealth : MonoBehaviour
 
         float opposite = -player.transform.rotation.y;
         transform.position += new Vector3(opposite, 0, opposite);
-    }
-
-    private void Stun()
-    {
-        if (stun)
-        {
-            // pause movement
-        }
     }
 
     private void DebugEnemyUI()
