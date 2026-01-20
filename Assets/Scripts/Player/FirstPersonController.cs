@@ -10,18 +10,25 @@ public class FirstPersonController : MonoBehaviour
     public static FirstPersonController Instance;
 
     [Header("Movement Speeds")]
-    [SerializeField] private float walkSpeed = 3.0f;
-    [SerializeField] private float sprintMultiplier = 2.0f;
+    [SerializeField] private float walkSpeed;
+    [SerializeField] private float sprintMultiplier;
 
     [Header("Stamina")]
     public float currentStamina;
     [SerializeField] private float maxStamina = 100f;
     [SerializeField] private float staminaIncreaseMultiplier = 0.2f;
     [SerializeField] private float staminaDecreaseMultiplier = 0.4f;
-    [SerializeField] private bool startStaminaIncrease;
     [SerializeField] private bool canSprint;
     [SerializeField] private Slider staminaSlider;
     [SerializeField] private Image staminaSliderFill;
+
+    [Header("Crouch")]
+    private Vector3 centre = new (0, 0, 0);
+    private float height = 2f;
+    private Vector3 crouchCentre = new (0, -0.25f, 0);
+    private float crouchHeight = 1.5f;
+
+    public bool isCrouching;
 
     [Header("Jump Parameters")]
     [SerializeField] private float jumpForce = 5.0f;
@@ -34,6 +41,10 @@ public class FirstPersonController : MonoBehaviour
     [Header("References")]
     [SerializeField] private CharacterController characterController;
     [SerializeField] private CinemachineCamera mainCamera;
+    [SerializeField] private CapsuleCollider col;
+
+    [Header("Animators")]
+    [SerializeField] private Animator cameraAnimator;
 
     [Header("Colours")]
     private Color red = new (1, 0, 0);
@@ -43,7 +54,7 @@ public class FirstPersonController : MonoBehaviour
     private float verticalRotation;
 
     // directly manipulate the variable
-    private float CurrentSpeed => walkSpeed * (PlayerInputHandler.Instance.SprintTriggered ? sprintMultiplier : 1);
+    private float CurrentSpeed;
 
     private void Awake()
     {
@@ -64,6 +75,7 @@ public class FirstPersonController : MonoBehaviour
         {
             characterController = GetComponent<CharacterController>();
             mainCamera = GetComponentInChildren<CinemachineCamera>();
+            col = GetComponent<CapsuleCollider>();
         }
     }
 
@@ -71,7 +83,7 @@ public class FirstPersonController : MonoBehaviour
     {
         // variables may be set as null/are missing
         // these are failsafes incase they do
-        if (characterController || mainCamera == null)
+        if (characterController || mainCamera || col == null)
         {
             return false;
         }
@@ -101,7 +113,9 @@ public class FirstPersonController : MonoBehaviour
     {
         HandleMovement();
         HandleRotation();
+        HandleCrouch();
         Stamina();
+        SpeedMultiplierHandler();
     }
     
     private Vector3 CalculateWorldDirection()
@@ -142,6 +156,9 @@ public class FirstPersonController : MonoBehaviour
 
         // i dont like the fact the HandleJumping method is so nested lmao
         HandleJumping();
+        Stamina();
+
+        CurrentSpeed = walkSpeed * sprintMultiplier;
         
         characterController.Move(currentMovement * Time.deltaTime);
     }
@@ -156,52 +173,92 @@ public class FirstPersonController : MonoBehaviour
         verticalRotation = Mathf.Clamp(verticalRotation - rotationAmount, -upDownLookRange, upDownLookRange);
         mainCamera.transform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
     }
-
-    public float mouseYRotation;    
+  
     private void HandleRotation()
     {
         float mouseXRotation = PlayerInputHandler.Instance.RotationInput.x * mouseSensitivity;
-        mouseYRotation = PlayerInputHandler.Instance.RotationInput.y * mouseSensitivity;
+        float mouseYRotation = PlayerInputHandler.Instance.RotationInput.y * mouseSensitivity;
         
         ApplyHorizontalRotation(mouseXRotation);
         ApplyVerticalRotation(mouseYRotation);        
     }
 
-    private void Crouching()
+    private void HandleCrouch()
     {
+        if (PlayerInputHandler.Instance.CrouchTriggered)
+        {
+            // adjusting the height of collider and character controller
+            // the center is changed so that the collider and controller remains on the ground
+            col.center = crouchCentre;
+            col.height = crouchHeight;
+            characterController.center = crouchCentre;
+            characterController.height = crouchHeight;
 
+            isCrouching = true;
+
+            cameraAnimator.SetBool("Crouch", true);
+        }
+        else
+        {
+            col.center = centre;
+            col.height = height;
+            characterController.center = centre;
+            characterController.height = height;
+
+            isCrouching = false;
+
+            cameraAnimator.SetBool("Crouch", false);
+        }
+    }
+
+    private void SpeedMultiplierHandler()
+    {
+        if (PlayerInputHandler.Instance.SprintTriggered && canSprint == true)
+        {
+            sprintMultiplier = 2f;
+        }
+        else if (PlayerInputHandler.Instance.CrouchTriggered)
+        {
+            sprintMultiplier = 0.5f;
+        }
+        else
+        {
+            // keeps walk speed as original value
+            sprintMultiplier = 1f;
+        }
     }
 
     private void Stamina()
     {
         if (PlayerInputHandler.Instance.SprintTriggered && canSprint == true)
         {
-            sprintMultiplier = 2f;
-
-            currentStamina -= (staminaDecreaseMultiplier * Time.deltaTime);
+            StaminaDecrease();
         }
         else
         {
-            // use else for anything that isnt sprint and bool canSprint true
-            // keeps walk speed as original value
-            sprintMultiplier = 1f;
-            startStaminaIncrease = true;
-
             StaminaIncrease();
         }
 
-        staminaSlider.value = currentStamina;
+        // sprinting then crouching would register the player as still running
+        if (PlayerInputHandler.Instance.SprintTriggered)
+        {
+            if (PlayerInputHandler.Instance.CrouchTriggered)
+            {
+                PlayerInputHandler.Instance.SprintTriggered = false;
+            }
+        }
 
         StaminaCap();
-        StaminaSliderColourChange();
+        StaminaSlider();
     }
-
     private void StaminaIncrease()
     {
-        if (startStaminaIncrease)
-        {
-            currentStamina += (staminaIncreaseMultiplier * Time.deltaTime);
-        }
+        currentStamina += (staminaIncreaseMultiplier * Time.deltaTime);
+    }
+
+    private void StaminaDecrease()
+    {
+        currentStamina -= (staminaDecreaseMultiplier * Time.deltaTime);
     }
 
     private void StaminaCap()
@@ -210,7 +267,6 @@ public class FirstPersonController : MonoBehaviour
         if (currentStamina >= maxStamina)
         {
             currentStamina = maxStamina;
-            startStaminaIncrease = false;
         }
 
         // stops current stamina going below 0
@@ -219,17 +275,21 @@ public class FirstPersonController : MonoBehaviour
             currentStamina = 0;
             canSprint = false;
             PlayerInputHandler.Instance.SprintTriggered = false;
-            startStaminaIncrease = true;
         }
 
         if (currentStamina > 25)
         {
-            canSprint = true;
+            if (!isCrouching) // stops player running when crouched
+            {
+                canSprint = true;
+            }
         }
     }
 
-    private void StaminaSliderColourChange()
+    private void StaminaSlider()
     {
+        staminaSlider.value = currentStamina;
+
         if (currentStamina < 25)
         {
             staminaSliderFill.color = red;

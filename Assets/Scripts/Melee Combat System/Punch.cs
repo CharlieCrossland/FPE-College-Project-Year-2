@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Android.Types;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -62,8 +63,15 @@ public class Punch : MonoBehaviour
         {
             if (PlayerInputHandler.Instance.attackAction.WasPressedThisFrame())
             {
-                startPunchCounterManager = true;
-                DetectPunchAttackSequence();
+                if (!FirstPersonController.Instance.isCrouching)
+                {
+                    startPunchCounterManager = true;
+                    DetectPunchAttackSequence();
+                }
+                else
+                {
+                    CrouchPunch();
+                }
             }
         }
     }
@@ -141,6 +149,14 @@ public class Punch : MonoBehaviour
     {
         punchCounter = 0;
         yield break;
+    }
+
+    private void CrouchPunch()
+    {
+        CombatManager.Instance.canAttack = false;
+        animator.SetTrigger("Punch2");
+        StartCoroutine(CrouchPunchRay());
+        CooldownStart.Invoke();
     }
 
     void PunchCounterManager()
@@ -223,6 +239,28 @@ public class Punch : MonoBehaviour
             {
                 yield return new WaitForSeconds(0.75f);
                 enemyHealth.Uppercut();
+                yield break;
+            }
+            else
+            {
+                yield break;
+            }
+        }
+    }
+
+    private IEnumerator CrouchPunchRay()
+    {
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * punchRange, Color.yellow);
+
+        Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
+        if (Physics.Raycast(r, out hit, punchRange, layerMask))
+        {
+            // checking if enemy health script is not null otherwise an error is thrown that the component is missing while it is trying to be accessed
+            enemyHealth = hit.collider.gameObject.GetComponent<EnemyHealth>();
+            if (enemyHealth != null)
+            {
+                yield return new WaitForSeconds(0.5f);
+                enemyHealth.CrouchPunch();
                 yield break;
             }
             else

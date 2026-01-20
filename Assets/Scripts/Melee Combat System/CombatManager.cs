@@ -11,7 +11,8 @@ public class CombatManager : MonoBehaviour
     [Header("Cooldown")]
     public bool canAttack;
     private float punchCD = 0.55f;
-    private float kickCD = 1.0f;
+    private float crouchPunchCD = 0.3f;
+    private float kickCD = 0.9f;
 
     [Header("Punch Damage")]
     public float BasicPunchDMG;
@@ -32,6 +33,18 @@ public class CombatManager : MonoBehaviour
     IEnumerator ResetPunchCD()
     {
         yield return new WaitForSeconds(punchCD);
+        canAttack = true;
+        yield break;
+    }
+
+    public void CrouchPunchCooldown()
+    {
+        StartCoroutine(ResetCrouchPunchCD());
+    }
+
+    IEnumerator ResetCrouchPunchCD()
+    {
+        yield return new WaitForSeconds(crouchPunchCD);
         canAttack = true;
         yield break;
     }

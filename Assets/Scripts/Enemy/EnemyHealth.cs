@@ -63,6 +63,13 @@ public class EnemyHealth : MonoBehaviour
         health -= CombatManager.Instance.UppercutDMG;
     }
 
+    public void CrouchPunch()
+    {
+        stun = true;
+
+        health -= CombatManager.Instance.BasicPunchDMG;
+    }
+
     public void SnapKick()
     {
         // find the distance between enemy and player
