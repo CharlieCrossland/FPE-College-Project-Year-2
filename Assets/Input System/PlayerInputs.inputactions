@@ -181,7 +181,7 @@
                     "name": "",
                     "id": "781beb82-89ae-4323-a290-5e4217faf270",
                     "path": "<Mouse>/leftButton",
-                    "interactions": "Press(behavior=2)",
+                    "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "Attack",
