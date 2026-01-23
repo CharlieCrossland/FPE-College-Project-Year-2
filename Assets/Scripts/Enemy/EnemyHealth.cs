@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class EnemyHealth : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class EnemyHealth : MonoBehaviour
     // knockback will move the enemy opposite to the direction of the punch
     private bool knockback;
     public bool stun; // stun handled in enemy ai script
+    public bool dummy;
 
     private Animator animator;
 
@@ -22,12 +24,18 @@ public class EnemyHealth : MonoBehaviour
     private void Awake()
     {
         animator = GetComponentInChildren<Animator>();
+        health = maxHealth;
     }
 
     private void Update()
     {
-        Health();
+        // Health();
         DebugEnemyUI();
+    }
+
+    private void FixedUpdate()
+    {
+        Health();
     }
 
     private void Health()
@@ -36,10 +44,27 @@ public class EnemyHealth : MonoBehaviour
         if (health <= noHealth)
         {
             Debug.Log("Enemy Killed");
-            health = noHealth;
-            // play death animation and destroy object
-            Destroy(this.gameObject);
+            //health = noHealth;
+            //// play death animation and destroy object
+            //Destroy(this.gameObject);
+
+            // ALPHA DELETE AFTER PLAYTEST
+            if (dummy)
+            {
+                StartCoroutine(HealthRegen());
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
         }
+    }
+
+    IEnumerator HealthRegen()
+    {
+        Debug.Log("HealthRegen");
+        yield return new WaitForSeconds(1f);
+        health = maxHealth;
     }
 
     public void BasicPunch()
@@ -78,8 +103,14 @@ public class EnemyHealth : MonoBehaviour
         //Vector3 knockbackDirection = -distance;
         //transform.position = knockbackDirection;
 
-        float opposite = -player.transform.rotation.y;
-        transform.position += new Vector3(opposite, 0, opposite);
+        //float opposite = -player.transform.rotation.y;
+        //transform.position += new Vector3(opposite, 0, opposite);
+
+        stun = true;
+
+        animator.SetTrigger("UppercutStun");
+
+        health -= CombatManager.Instance.KickDMG;
     }
 
     private void DebugEnemyUI()

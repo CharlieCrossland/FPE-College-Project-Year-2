@@ -12,12 +12,13 @@ public class CombatManager : MonoBehaviour
     public bool canAttack;
     private float punchCD = 0.55f;
     private float crouchPunchCD = 0.3f;
-    private float kickCD = 0.9f;
+    private float kickCD = 1.1f;
 
     [Header("Punch Damage")]
     public float BasicPunchDMG;
     public float HookDMG;
     public float UppercutDMG;
+    public float KickDMG;
 
     private void Awake()
     {

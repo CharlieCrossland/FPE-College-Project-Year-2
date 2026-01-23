@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Cinemachine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 // add components needed for script to work
 // prevents compile errors
@@ -297,6 +298,14 @@ public class FirstPersonController : MonoBehaviour
         else
         {
             staminaSliderFill.color = green;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("ResetScene"))
+        {
+            SceneManager.LoadScene("AlphaPlaytest");
         }
     }
 }

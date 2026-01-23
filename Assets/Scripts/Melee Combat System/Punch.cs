@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.Android.Types;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -199,6 +198,7 @@ public class Punch : MonoBehaviour
             }
             else
             {
+                Debug.Log("Enemy Script not found");
                 yield break;
             }
         }
