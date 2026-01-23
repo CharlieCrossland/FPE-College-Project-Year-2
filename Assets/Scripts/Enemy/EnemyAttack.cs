@@ -6,6 +6,7 @@ public class EnemyAttack : MonoBehaviour
     [Header("Cooldown")]
     private float cd;
     private float maxCD = 7.5f;
+    private bool canAttack;
 
     [Header("Raycast")]
     [SerializeField] private Transform raySource;
@@ -32,12 +33,13 @@ public class EnemyAttack : MonoBehaviour
         {
             cd = 0;
             Debug.Log("Enemy Cooldown = 0");
+            canAttack = true;
         }
     }
 
     private void Attack()
     {
-        if (transform)
+        if (canAttack)
         {
             StartCoroutine(AttackRay());
         }
@@ -54,6 +56,7 @@ public class EnemyAttack : MonoBehaviour
                 Debug.Log("Enemy Attack");
                 healthScript.currentHealth -= 20;
                 cd = maxCD;
+                canAttack = false;
                 yield break;
             }
         }
