@@ -62,6 +62,8 @@ public class Kicking : MonoBehaviour
             }
             else
             {
+                yield return new WaitForSeconds(0.5f);
+                FirstPersonController.Instance.snapKick = true;
                 yield break;
             }
         }

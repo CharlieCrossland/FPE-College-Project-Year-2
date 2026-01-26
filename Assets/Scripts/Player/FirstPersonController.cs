@@ -35,6 +35,11 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float jumpForce = 5.0f;
     [SerializeField] private float gravityMultiplier = 1.0f;
 
+    [Header("Wall Jump")]
+    private bool canWallJump;
+    [SerializeField] private float wallJumpForce;
+    public bool snapKick;
+
     [Header("Look Parameters")]
     [SerializeField] private float mouseSensitivity = 0.1f;
     [SerializeField] private float upDownLookRange = 80f;
@@ -115,6 +120,7 @@ public class FirstPersonController : MonoBehaviour
         HandleMovement();
         HandleRotation();
         HandleCrouch();
+        WallJump();
         Stamina();
         SpeedMultiplierHandler();
     }
@@ -301,11 +307,33 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
+    private void WallJump()
+    {
+        if (characterController.isGrounded)
+        {
+            canWallJump = false;
+        }
+        else if (snapKick && canWallJump)
+        {
+            currentMovement.y = wallJumpForce;
+            snapKick = false;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("ResetScene"))
         {
             SceneManager.LoadScene("AlphaPlaytest");
         }
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (!characterController.isGrounded && hit.transform.CompareTag("Wall"))
+        {
+            Debug.Log("HitWall");
+            canWallJump = true;
+        }  
     }
 }
