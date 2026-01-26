@@ -10,6 +10,8 @@ public class FirstPersonController : MonoBehaviour
 {
     public static FirstPersonController Instance;
 
+    [HideInInspector] public bool inMenu;
+
     [Header("Movement Speeds")]
     [SerializeField] private float walkSpeed;
     [SerializeField] private float sprintMultiplier;
@@ -67,6 +69,8 @@ public class FirstPersonController : MonoBehaviour
         CheckReferences();
         StaminaValueSet();
 
+        inMenu = false;
+
         Instance = this;
     }
 
@@ -104,19 +108,9 @@ public class FirstPersonController : MonoBehaviour
         staminaSliderFill.color = green;
     }
 
-    void Start()
-    {
-        SetCursor();
-    }
-
-    void SetCursor()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
-
     void Update()
     {
+        SetCursor();
         HandleMovement();
         HandleRotation();
         HandleCrouch();
@@ -124,7 +118,21 @@ public class FirstPersonController : MonoBehaviour
         Stamina();
         SpeedMultiplierHandler();
     }
-    
+
+    void SetCursor()
+    {
+        if (inMenu)
+        {
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
+
     private Vector3 CalculateWorldDirection()
     {
         // i am using the players input to find a local position in x and y

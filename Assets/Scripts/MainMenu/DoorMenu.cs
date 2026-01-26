@@ -1,15 +1,19 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class DoorMenu : MonoBehaviour, IInteractable
 {
-    private bool inMenu;
-    private Canvas levelSelect;
+    private bool pullDownMap;
+    [SerializeField] private GameObject levelSelectScreen;
+    private Animator animator;
 
     public void Interact()
     {
-        if (!inMenu)
+        if (!FirstPersonController.Instance.inMenu)
         {
-            levelSelect.enabled = true;
+            levelSelectScreen.SetActive(false);
         }
     }
 
@@ -20,13 +24,38 @@ public class DoorMenu : MonoBehaviour, IInteractable
 
     private void Update()
     {
-        if (inMenu)
+        if (FirstPersonController.Instance.inMenu)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                levelSelect.enabled = false;
-                inMenu = false;
+                levelSelectScreen.SetActive(false);
+                FirstPersonController.Instance.inMenu = false;
             }
         }
+        
+        if (pullDownMap)
+        {
+            StartCoroutine(MapDownTransition());
+        }
+    }
+
+    IEnumerator MapDownTransition()
+    {
+        levelSelectScreen.transform.DOMoveY(-6f, 3f);
+        yield break;
+    }
+
+    public void StartLevel1Coroutine()
+    {
+        StartCoroutine(Level1());
+    }
+
+    IEnumerator Level1()
+    {
+        pullDownMap = true;
+        yield return new WaitForSeconds(2f);
+        StartCoroutine(BlackScreen.Instance.StartBlackScreen());
+        SceneManager.LoadScene("OfficeLevel1");
+        yield break;
     }
 }
