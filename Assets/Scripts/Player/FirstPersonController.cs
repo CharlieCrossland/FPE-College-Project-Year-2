@@ -111,12 +111,16 @@ public class FirstPersonController : MonoBehaviour
     void Update()
     {
         SetCursor();
-        HandleMovement();
-        HandleRotation();
-        HandleCrouch();
-        WallJump();
-        Stamina();
-        SpeedMultiplierHandler();
+
+        if (!inMenu)
+        {
+            HandleMovement();
+            HandleRotation();
+            HandleCrouch();
+            WallJump();
+            Stamina();
+            SpeedMultiplierHandler();
+        }
     }
 
     void SetCursor()
@@ -194,8 +198,12 @@ public class FirstPersonController : MonoBehaviour
         float mouseXRotation = PlayerInputHandler.Instance.RotationInput.x * mouseSensitivity;
         float mouseYRotation = PlayerInputHandler.Instance.RotationInput.y * mouseSensitivity;
         
-        ApplyHorizontalRotation(mouseXRotation);
-        ApplyVerticalRotation(mouseYRotation);        
+        // stops the player from looking around while trying to use UI
+        if (!inMenu)
+        {
+            ApplyHorizontalRotation(mouseXRotation);
+            ApplyVerticalRotation(mouseYRotation);
+        }      
     }
 
     private void HandleCrouch()

@@ -1,10 +1,12 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class BlackScreen : MonoBehaviour
 {
     public static BlackScreen Instance;
     public Animator animator;
+    [SerializeField] private Image blackScreen;
 
     public void Awake()
     {
@@ -13,7 +15,8 @@ public class BlackScreen : MonoBehaviour
 
     public void Start()
     {
-        StartCoroutine(EndBlackScreen());
+        blackScreen.enabled = true;
+        StartCoroutine(EnterLevel());
     }
 
     public IEnumerator StartBlackScreen()
@@ -22,7 +25,7 @@ public class BlackScreen : MonoBehaviour
         yield break;
     }
 
-    public IEnumerator EndBlackScreen()
+    public IEnumerator EnterLevel()
     {
         animator.SetTrigger("End");
         yield break;

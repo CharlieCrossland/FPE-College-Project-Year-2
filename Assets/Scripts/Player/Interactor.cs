@@ -12,15 +12,17 @@ public class Interactor : MonoBehaviour
     [SerializeField] private float InteractRange;
 
     [Header("WeaponTooltips")]
-    [SerializeField] private TMP_Text weaponTooltip;
+    [SerializeField] private TMP_Text tooltip;
 
     [Header("Layers")]
     private int LayerWeapon;
+    private int LayerInteract;
 
     private void Awake()
     {
         // weapon layer
         LayerWeapon = LayerMask.NameToLayer("Weapon");
+        LayerInteract = LayerMask.NameToLayer("Interact");
     }
 
     void Update()
@@ -58,13 +60,18 @@ public class Interactor : MonoBehaviour
                 if (layerInfo.collider.gameObject.TryGetComponent(out WeaponScript weaponScript))
                 {
                     // enables the weapon pickup tooltip and tells the player what weapon it is
-                    weaponTooltip.enabled = true;
-                    weaponTooltip.SetText("Press E to Pick Up " + weaponScript.weaponName);
+                    tooltip.enabled = true;
+                    tooltip.SetText("Press E to Pick Up " + weaponScript.weaponName);
                 }
+            }
+            else if (layerInfo.collider.gameObject.layer == LayerInteract && !FirstPersonController.Instance.inMenu)
+            {
+                tooltip.enabled = true;
+                tooltip.SetText("Press E to Interact");
             }
             else
             {
-                weaponTooltip.enabled = false;
+                tooltip.enabled = false;
             }
         }
     }

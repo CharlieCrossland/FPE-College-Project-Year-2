@@ -198,7 +198,6 @@ public class Punch : MonoBehaviour
             }
             else
             {
-                Debug.Log("Enemy Script not found");
                 yield break;
             }
         }
