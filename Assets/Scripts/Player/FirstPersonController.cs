@@ -1,6 +1,5 @@
 using UnityEngine;
 using Unity.Cinemachine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 // add components needed for script to work
@@ -15,15 +14,6 @@ public class FirstPersonController : MonoBehaviour
     [Header("Movement Speeds")]
     [SerializeField] private float walkSpeed;
     [SerializeField] private float sprintMultiplier;
-
-    [Header("Stamina")]
-    public float currentStamina;
-    [SerializeField] private float maxStamina = 100f;
-    [SerializeField] private float staminaIncreaseMultiplier = 0.2f;
-    [SerializeField] private float staminaDecreaseMultiplier = 0.4f;
-    [SerializeField] private bool canSprint;
-    [SerializeField] private Slider staminaSlider;
-    [SerializeField] private Image staminaSliderFill;
 
     [Header("Crouch")]
     private Vector3 centre = new (0, 0, 0);
@@ -41,6 +31,7 @@ public class FirstPersonController : MonoBehaviour
     private bool canWallJump;
     [SerializeField] private float wallJumpForce;
     public bool snapKick;
+    private int wallJumpCounter;
 
     [Header("Look Parameters")]
     [SerializeField] private float mouseSensitivity = 0.1f;
@@ -54,10 +45,6 @@ public class FirstPersonController : MonoBehaviour
     [Header("Animators")]
     [SerializeField] private Animator cameraAnimator;
 
-    [Header("Colours")]
-    private Color red = new (1, 0, 0);
-    private Color green = new (0, 1, 0);
-
     private Vector3 currentMovement;
     private float verticalRotation;
 
@@ -67,7 +54,6 @@ public class FirstPersonController : MonoBehaviour
     private void Awake()
     {
         CheckReferences();
-        StaminaValueSet();
 
         inMenu = false;
 
@@ -100,14 +86,6 @@ public class FirstPersonController : MonoBehaviour
         return true;
     }
 
-    private void StaminaValueSet()
-    {
-        currentStamina = maxStamina;
-        staminaSlider.maxValue = maxStamina;
-
-        staminaSliderFill.color = green;
-    }
-
     void Update()
     {
         SetCursor();
@@ -118,7 +96,6 @@ public class FirstPersonController : MonoBehaviour
             HandleRotation();
             HandleCrouch();
             WallJump();
-            Stamina();
             SpeedMultiplierHandler();
         }
     }
@@ -175,7 +152,6 @@ public class FirstPersonController : MonoBehaviour
 
         // i dont like the fact the HandleJumping method is so nested lmao
         HandleJumping();
-        Stamina();
 
         CurrentSpeed = walkSpeed * sprintMultiplier;
         
@@ -236,7 +212,7 @@ public class FirstPersonController : MonoBehaviour
 
     private void SpeedMultiplierHandler()
     {
-        if (PlayerInputHandler.Instance.SprintTriggered && canSprint == true)
+        if (PlayerInputHandler.Instance.SprintTriggered && Stamina.Instance.canSprint == true)
         {
             sprintMultiplier = 2f;
         }
@@ -251,88 +227,26 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
-    private void Stamina()
-    {
-        if (PlayerInputHandler.Instance.SprintTriggered && canSprint == true)
-        {
-            StaminaDecrease();
-        }
-        else
-        {
-            StaminaIncrease();
-        }
-
-        // sprinting then crouching would register the player as still running
-        if (PlayerInputHandler.Instance.SprintTriggered)
-        {
-            if (PlayerInputHandler.Instance.CrouchTriggered)
-            {
-                PlayerInputHandler.Instance.SprintTriggered = false;
-            }
-        }
-
-        StaminaCap();
-        StaminaSlider();
-    }
-    private void StaminaIncrease()
-    {
-        currentStamina += (staminaIncreaseMultiplier * Time.deltaTime);
-    }
-
-    private void StaminaDecrease()
-    {
-        currentStamina -= (staminaDecreaseMultiplier * Time.deltaTime);
-    }
-
-    private void StaminaCap()
-    {
-        // stops stamina going above max stamina
-        if (currentStamina >= maxStamina)
-        {
-            currentStamina = maxStamina;
-        }
-
-        // stops current stamina going below 0
-        if (currentStamina <= 0)
-        {
-            currentStamina = 0;
-            canSprint = false;
-            PlayerInputHandler.Instance.SprintTriggered = false;
-        }
-
-        if (currentStamina > 25)
-        {
-            if (!isCrouching) // stops player running when crouched
-            {
-                canSprint = true;
-            }
-        }
-    }
-
-    private void StaminaSlider()
-    {
-        staminaSlider.value = currentStamina;
-
-        if (currentStamina < 25)
-        {
-            staminaSliderFill.color = red;
-        }
-        else
-        {
-            staminaSliderFill.color = green;
-        }
-    }
-
     private void WallJump()
     {
         if (characterController.isGrounded)
         {
             canWallJump = false;
+            snapKick = false;
+            wallJumpCounter = 0;
         }
         else if (snapKick && canWallJump)
         {
-            currentMovement.y = wallJumpForce;
-            snapKick = false;
+            if (wallJumpCounter < 1)
+            {
+                currentMovement.y = wallJumpForce;
+                snapKick = false;
+                wallJumpCounter += 1;
+            }
+            else
+            {
+                Debug.Log("Already wall jumped");
+            }    
         }
     }
 

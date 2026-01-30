@@ -8,6 +8,11 @@ public class Kicking : MonoBehaviour
     [SerializeField] private GameObject legs;
     [SerializeField] private Animator animator;
 
+    private int kickCounter;
+    private float kickCountdown;
+    readonly private float maxKickCountdown = 1f; // cant be less than attack cooldown
+    private bool startKickCounterManager;
+
     [Header("Cooldown")]
     public UnityEvent CooldownStart;
 
@@ -27,22 +32,62 @@ public class Kicking : MonoBehaviour
 
     private void Update()
     {
-        SnapKick();
+        CanKick();
         RoundhouseKick();
+    }
+
+    void CanKick()
+    {
+        if (!CombatManager.Instance.canAttack == true)
+        {
+            if (PlayerInputHandler.Instance.kickAction.WasPressedThisFrame())
+            {
+                if (!FirstPersonController.Instance.isCrouching)
+                {
+                    startKickCounterManager = true;
+                    DetectKickAttackSequence();
+                }
+                else
+                {
+                    Sweep();
+                }
+            }
+        }
+    }
+
+    void DetectKickAttackSequence()
+    {
+        // use switch case to keep code clean and readable
+        // counter starts at 0 as default state
+        switch (kickCounter)
+        {
+            case 0:
+                SnapKick();
+                break;
+            case 1:
+                SideKick();
+                break;
+        }
     }
 
     void SnapKick()
     {
-        if (CombatManager.Instance.canAttack && !Punch.Instance.rightJab)
-        {
-            if (PlayerInputHandler.Instance.kickAction.WasPressedThisFrame())
-            {
-                CombatManager.Instance.canAttack = false;
-                animator.SetTrigger("Attack");
-                StartCoroutine(SnapKickRay());
-                CooldownStart.Invoke();
-            }
-        }
+        CombatManager.Instance.canAttack = false;
+        kickCountdown = maxKickCountdown;
+        kickCounter = +1;
+        animator.SetTrigger("Punch1");
+        StartCoroutine(SnapKickRay());
+        CooldownStart.Invoke();
+    }
+
+    void SideKick()
+    {
+
+    }
+
+    void Sweep()
+    {
+
     }
 
     IEnumerator SnapKickRay()
@@ -62,7 +107,7 @@ public class Kicking : MonoBehaviour
             }
             else
             {
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(0.4f);
                 FirstPersonController.Instance.snapKick = true;
                 yield break;
             }

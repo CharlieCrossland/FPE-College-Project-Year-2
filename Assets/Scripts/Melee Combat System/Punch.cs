@@ -98,8 +98,7 @@ public class Punch : MonoBehaviour
             case 3:
                 Uppercut();
                 break;
-        }
-         
+        }  
     }
 
     private void LeftJab()
@@ -181,9 +180,12 @@ public class Punch : MonoBehaviour
         }    
     }
 
+    #region Coroutines
+
     IEnumerator BasicPunchRay()
     {
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * punchRange, Color.yellow);
+        Stamina.Instance.BasicPunch();
 
         Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
         if (Physics.Raycast(r, out hit, punchRange, layerMask))
@@ -206,6 +208,7 @@ public class Punch : MonoBehaviour
     private IEnumerator HookPunchRay()
     {
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * punchRange, Color.yellow);
+        Stamina.Instance.HookPunch();
 
         Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
         if (Physics.Raycast(r, out hit, punchRange, layerMask))
@@ -228,6 +231,7 @@ public class Punch : MonoBehaviour
     private IEnumerator UppercutRay()
     {
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * punchRange, Color.yellow);
+        Stamina.Instance.UppercutPunch();
 
         Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
         if (Physics.Raycast(r, out hit, punchRange, layerMask))
@@ -250,6 +254,7 @@ public class Punch : MonoBehaviour
     private IEnumerator CrouchPunchRay()
     {
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * punchRange, Color.yellow);
+        Stamina.Instance.BasicPunch();
 
         Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
         if (Physics.Raycast(r, out hit, punchRange, layerMask))
@@ -269,6 +274,10 @@ public class Punch : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Secret Emote
+
     bool canSecretEmote;
     private void SecretEmote()
     {
@@ -279,7 +288,7 @@ public class Punch : MonoBehaviour
 
         if (canSecretEmote && Input.GetKeyDown(KeyCode.Alpha7))
         {
-            FirstPersonController.Instance.currentStamina = 0;
+            Stamina.Instance.currentStamina = 0;
             animator.SetTrigger("SecretEmote");
             canSecretEmote = false;
         }
@@ -292,4 +301,6 @@ public class Punch : MonoBehaviour
         canSecretEmote = false;
         yield break;
     }
+
+    #endregion
 }
