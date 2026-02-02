@@ -1,3 +1,4 @@
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,9 +15,15 @@ public class Stamina : MonoBehaviour
     [SerializeField] private Slider staminaSlider;
     [SerializeField] private Image staminaSliderFill;
 
+    [Header("Coffee Effect")]
+    public bool startCoffeeTimer = false;
+    private float timer;
+    readonly private float maxTime = 4f;
+
     [Header("Colours")]
     private Color red = new(1, 0, 0);
     private Color green = new(0, 1, 0);
+    private Color blue = new(0, 0, 1);
 
     private void Awake()
     {
@@ -45,6 +52,7 @@ public class Stamina : MonoBehaviour
     private void Update()
     {
         Main();
+        CoffeeEndlessStamina();
     }
 
     private void Main()
@@ -120,11 +128,34 @@ public class Stamina : MonoBehaviour
         }
     }
 
+    #region coffee effects
+
+    public void CoffeeEndlessStamina()
+    {
+        if (startCoffeeTimer == true)
+        {
+            currentStamina = maxStamina;
+            staminaSliderFill.color = blue;
+
+            timer -= Time.deltaTime;
+
+            if (timer <= 0)
+            {
+                startCoffeeTimer = false;
+            }
+        }
+        else
+        {
+            timer = maxTime;
+        }
+    }
+
+    #endregion
+
     #region public methods
 
     public void BasicPunch(float basicPunchStamina = 10f)
     {
-        Debug.Log(currentStamina);
         currentStamina -= basicPunchStamina;
     }
 

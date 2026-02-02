@@ -33,12 +33,15 @@ public class FirstPersonController : MonoBehaviour
     public bool snapKick;
     private int wallJumpCounter;
 
+    [Header("Side Kick")]
+    public bool sideKick;
+
     [Header("Look Parameters")]
     [SerializeField] private float mouseSensitivity = 0.1f;
     [SerializeField] private float upDownLookRange = 80f;
 
     [Header("References")]
-    [SerializeField] private CharacterController characterController;
+    public CharacterController characterController;
     [SerializeField] private CinemachineCamera mainCamera;
     [SerializeField] private CapsuleCollider col;
 
@@ -212,13 +215,28 @@ public class FirstPersonController : MonoBehaviour
 
     private void SpeedMultiplierHandler()
     {
-        if (PlayerInputHandler.Instance.SprintTriggered && Stamina.Instance.canSprint == true)
+        if (PlayerInputHandler.Instance.SprintTriggered && Stamina.Instance.canSprint == true && characterController.isGrounded)
         {
             sprintMultiplier = 2f;
         }
         else if (PlayerInputHandler.Instance.CrouchTriggered)
         {
             sprintMultiplier = 0.5f;
+        }
+        else if (sideKick == true)
+        {
+            sprintMultiplier = 0.2f;
+        }
+        else if (!characterController.isGrounded)
+        {
+            if (PlayerInputHandler.Instance.SprintTriggered && Stamina.Instance.canSprint)
+            {
+                sprintMultiplier = 1.3f;
+            }
+            else
+            {
+                sprintMultiplier = 0.4f;
+            }
         }
         else
         {

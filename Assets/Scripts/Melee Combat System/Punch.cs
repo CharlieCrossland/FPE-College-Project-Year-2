@@ -176,6 +176,7 @@ public class Punch : MonoBehaviour
         else
         {
             punchCounter = 0;
+            rightJab = false;
             punchCountdown = maxPunchCountdown;
         }    
     }

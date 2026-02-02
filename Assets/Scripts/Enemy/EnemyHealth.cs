@@ -110,7 +110,13 @@ public class EnemyHealth : MonoBehaviour
 
         animator.SetTrigger("UppercutStun");
 
-        health -= CombatManager.Instance.KickDMG;
+        health -= CombatManager.Instance.snapKickDMG;
+    }
+
+    public void SideKick()
+    {
+        stun = true;
+        health -= CombatManager.Instance.snapKickDMG;
     }
 
     private void DebugEnemyUI()

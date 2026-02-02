@@ -400,6 +400,7 @@ MonoBehaviour:
   health: 200
   maxHealth: 0
   stun: 0
+  dummy: 0
   player: {fileID: 0}
   healthText: {fileID: 5531641803686070751}
 --- !u!114 &6005584171424430807

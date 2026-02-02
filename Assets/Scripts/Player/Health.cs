@@ -3,14 +3,21 @@ using UnityEngine.UI;
 
 public class Health : MonoBehaviour
 {
+    [Header("Player")]
     public float currentHealth;
     public float maxHealth;
+
+    [Header("Health Pack")]
+    [SerializeField] private float healthPackIncreaseAmount;
+
+    private BoxCollider col;
 
     [SerializeField] private Slider slider;
 
     private void Awake()
     {
         currentHealth = maxHealth;
+        col = GetComponent<BoxCollider>();
     }
 
     private void Update()
@@ -44,5 +51,15 @@ public class Health : MonoBehaviour
     {
         slider.value = currentHealth;
         slider.maxValue = maxHealth;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Health"))
+        {
+            currentHealth += healthPackIncreaseAmount;
+            Stamina.Instance.startCoffeeTimer = true;
+            other.gameObject.SetActive(false);
+        }
     }
 }
