@@ -133,6 +133,7 @@ Material:
     - _GridThickness: 2
     - _GridTiling: 2
     - _Metallic: 1
+    - _Mode: 0
     - _NoiseColourPower: 1
     - _NoiseDistortion: 0.04
     - _NoiseNormalFromHeight: 20
@@ -175,6 +176,7 @@ Material:
     - _TransShadow: 0.5
     - _TransStrength: 50
     - _TransmissionShadow: 0.5
+    - _UVSec: 0
     - _WarpNoise: 1
     - _WarpNoiseScale: 1
     - _WaveAmplitude: 0.2
