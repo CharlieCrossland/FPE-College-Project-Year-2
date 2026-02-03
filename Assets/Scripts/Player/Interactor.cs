@@ -23,6 +23,8 @@ public class Interactor : MonoBehaviour
         // weapon layer
         LayerWeapon = LayerMask.NameToLayer("Weapon");
         LayerInteract = LayerMask.NameToLayer("Interact");
+
+        tooltip.enabled = false;
     }
 
     void Update()

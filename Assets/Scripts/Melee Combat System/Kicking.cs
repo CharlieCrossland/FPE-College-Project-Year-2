@@ -11,7 +11,7 @@ public class Kicking : MonoBehaviour
 
     private int kickCounter;
     private float kickCountdown;
-    readonly private float maxKickCountdown = 1f; // cant be less than attack cooldown
+    readonly private float maxKickCountdown = 2.5f; // cant be less than attack cooldown
     private bool startKickCounterManager;
 
     [Header("Cooldown")]
@@ -70,15 +70,8 @@ public class Kicking : MonoBehaviour
                 SnapKick();
                 break;
             case 1:
-                if (!FirstPersonController.Instance.characterController.isGrounded)
-                {
-                    SideKick();
-                }
-                else
-                {
-                    FlyingKick();
-                }
-                    break;
+                SideKick();
+                break;
         }
     }
 
@@ -87,8 +80,17 @@ public class Kicking : MonoBehaviour
         CombatManager.Instance.canAttack = false;
         kickCountdown = maxKickCountdown;
         kickCounter = +1;
-        animator.SetTrigger("SnapKick");
-        StartCoroutine(SnapKickRay());
+        if (Punch.Instance.rightJab)
+        {
+            animator.SetTrigger("Roundhouse");
+            StartCoroutine(RoundhouseRay());
+            Punch.Instance.rightJab = false;
+        }
+        else
+        {
+            animator.SetTrigger("SnapKick");
+            StartCoroutine(SnapKickRay());
+        }
         CooldownStart.Invoke();
     }
 
@@ -97,8 +99,10 @@ public class Kicking : MonoBehaviour
         CombatManager.Instance.canAttack = false;
         kickCountdown = maxKickCountdown;
         kickCounter = +2;
+        FirstPersonController.Instance.sideKick = true;
         animator.SetTrigger("SideKick");
         StartCoroutine(SideKickRay());
+        StartCoroutine(ResetSideKickSpeed());
         CooldownStart.Invoke();
         StartCoroutine(ResetKickCombo());
     }
@@ -189,6 +193,35 @@ public class Kicking : MonoBehaviour
             }
             else
             {
+                yield break;
+            }
+        }
+    }
+
+    IEnumerator ResetSideKickSpeed()
+    {
+        yield return new WaitForSeconds(0.75f);
+        FirstPersonController.Instance.sideKick = false;
+        yield break;
+    }
+
+    IEnumerator RoundhouseRay()
+    {
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * kickRange, Color.yellow);
+
+        Ray r = new(raySource.position, raySource.TransformDirection(Vector3.forward));
+        if (Physics.Raycast(r, out hit, kickRange, layerMask))
+        {
+            // checking if enemy health script is not null otherwise an error is thrown that the component is missing while it is trying to be accessed
+            enemyHealth = hit.collider.gameObject.GetComponent<EnemyHealth>();
+            if (enemyHealth != null)
+            {
+                yield return new WaitForSeconds(0.5f);
+                enemyHealth.SideKick();
+                yield break;
+            }
+            else
+            {
                 yield return new WaitForSeconds(0.4f);
                 FirstPersonController.Instance.sideKick = true;
                 yield break;
@@ -201,16 +234,6 @@ public class Kicking : MonoBehaviour
         if (Punch.Instance.rightJab == true)
         {
             StartCoroutine(RightJabCountdown());
-        }
-
-        if (CombatManager.Instance.canAttack && Punch.Instance.rightJab)
-        {
-            if (PlayerInputHandler.Instance.kickAction.WasPressedThisFrame())
-            {
-                Debug.Log("ROUNDHOUSE");
-                animator.SetTrigger("Roundhouse");
-                Punch.Instance.rightJab = false;
-            }
         }
     }
 

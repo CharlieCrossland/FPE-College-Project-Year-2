@@ -28,7 +28,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float gravityMultiplier = 1.0f;
 
     [Header("Wall Jump")]
-    private bool canWallJump;
+    public bool canWallJump;
     [SerializeField] private float wallJumpForce;
     public bool snapKick;
     private int wallJumpCounter;
@@ -231,7 +231,7 @@ public class FirstPersonController : MonoBehaviour
         {
             if (PlayerInputHandler.Instance.SprintTriggered && Stamina.Instance.canSprint)
             {
-                sprintMultiplier = 1.3f;
+                sprintMultiplier = 1.5f;
             }
             else
             {
