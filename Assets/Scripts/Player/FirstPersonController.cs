@@ -95,12 +95,16 @@ public class FirstPersonController : MonoBehaviour
 
         if (!inMenu)
         {
-            HandleMovement();
             HandleRotation();
-            HandleCrouch();
-            WallJump();
-            SpeedMultiplierHandler();
         }
+    }
+
+    private void FixedUpdate()
+    {
+        SpeedMultiplierHandler();
+        HandleMovement();
+        HandleCrouch();
+        WallJump();
     }
 
     void SetCursor()
