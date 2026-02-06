@@ -10,8 +10,6 @@ public class DoorMenu : MonoBehaviour, IInteractable
     public void Interact()
     {
         StartCoroutine(MapUpTransition());
-        levelSelectScreen.SetActive(true);
-        FirstPersonController.Instance.inMenu = true;
     }
 
     private void Start()
@@ -19,21 +17,11 @@ public class DoorMenu : MonoBehaviour, IInteractable
         levelSelectScreen.SetActive(false);
     }
 
-    private void Update()
-    {
-        if (FirstPersonController.Instance.inMenu)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                StartCoroutine(MapDownTransition());
-                FirstPersonController.Instance.inMenu = false;
-            }
-        }
-    }
-
     IEnumerator MapDownTransition()
     {
+        Debug.Log("Map Down");
         animator.SetTrigger("Down");
+        FirstPersonController.Instance.inMenu = false;
         yield return new WaitForSeconds(1.5f);
         levelSelectScreen.SetActive(false);
         yield break;
@@ -41,24 +29,44 @@ public class DoorMenu : MonoBehaviour, IInteractable
 
     IEnumerator MapUpTransition()
     {
+        Debug.Log("Map Up");
         levelSelectScreen.SetActive(true);
         animator.SetTrigger("Up");
+        FirstPersonController.Instance.inMenu = true;
         yield return new WaitForSeconds(1.5f);
+        yield break;
+    }
+
+    public void StartTutorialCoroutine()
+    {
+        StartCoroutine(Tutorial());
+    }
+
+    IEnumerator Tutorial()
+    {
+        StartCoroutine(MapDownTransition());
+        StartCoroutine(BlackScreen.Instance.StartBlackScreen());
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("Tutorial");
         yield break;
     }
 
     public void StartLevel1Coroutine()
     {
-        Debug.Log("StartLevel1Coroutine");
         StartCoroutine(Level1());
     }
 
     IEnumerator Level1()
     {
         StartCoroutine(MapDownTransition());
-        StartCoroutine(BlackScreen.Instance.StartBlackScreen());
+        //StartCoroutine(BlackScreen.Instance.StartBlackScreen());
         yield return new WaitForSeconds(2f);
         SceneManager.LoadScene("OfficeLevel1");
         yield break;
+    }
+
+    public void Exit()
+    {
+        StartCoroutine(MapDownTransition());
     }
 }

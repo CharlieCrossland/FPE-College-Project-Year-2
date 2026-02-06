@@ -199,6 +199,11 @@ public class Punch : MonoBehaviour
                 enemyHealth.BasicPunch();
                 yield break;
             }
+            else if (hit.collider.gameObject.CompareTag("Breakable"))
+            {
+                yield return new WaitForSeconds(0.5f);
+                hit.collider.gameObject.SetActive(false);
+            }
             else
             {
                 yield break;
@@ -222,6 +227,11 @@ public class Punch : MonoBehaviour
                 enemyHealth.HookPunch();
                 yield break;
             }
+            else if (hit.collider.gameObject.CompareTag("Breakable"))
+            {
+                yield return new WaitForSeconds(0.5f);
+                hit.collider.gameObject.SetActive(false);
+            }
             else
             {
                 yield break;
@@ -244,6 +254,11 @@ public class Punch : MonoBehaviour
                 yield return new WaitForSeconds(0.75f);
                 enemyHealth.Uppercut();
                 yield break;
+            }
+            else if (hit.collider.gameObject.CompareTag("Breakable"))
+            {
+                yield return new WaitForSeconds(0.75f);
+                hit.collider.gameObject.SetActive(false);
             }
             else
             {

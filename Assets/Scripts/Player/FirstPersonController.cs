@@ -9,11 +9,11 @@ public class FirstPersonController : MonoBehaviour
 {
     public static FirstPersonController Instance;
 
-    [HideInInspector] public bool inMenu;
+    public bool inMenu;
 
     [Header("Movement Speeds")]
     [SerializeField] private float walkSpeed;
-    [SerializeField] private float sprintMultiplier;
+    public float sprintMultiplier;
 
     [Header("Crouch")]
     private Vector3 centre = new (0, 0, 0);
@@ -52,7 +52,7 @@ public class FirstPersonController : MonoBehaviour
     private float verticalRotation;
 
     // directly manipulate the variable
-    private float CurrentSpeed;
+    public float CurrentSpeed;
 
     private void Awake()
     {
@@ -217,7 +217,7 @@ public class FirstPersonController : MonoBehaviour
     {
         if (PlayerInputHandler.Instance.SprintTriggered && Stamina.Instance.canSprint == true && characterController.isGrounded)
         {
-            sprintMultiplier = 2f;
+            sprintMultiplier = 2.5f;
         }
         else if (PlayerInputHandler.Instance.CrouchTriggered)
         {
@@ -231,7 +231,7 @@ public class FirstPersonController : MonoBehaviour
         {
             if (PlayerInputHandler.Instance.SprintTriggered && Stamina.Instance.canSprint)
             {
-                sprintMultiplier = 1.5f;
+                sprintMultiplier = 1.4f;
             }
             else
             {

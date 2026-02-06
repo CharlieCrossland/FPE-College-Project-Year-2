@@ -12,9 +12,12 @@ EditorBuildSettings:
     path: Assets/Scenes/AlphaPlaytest/AlphaPlaytest.unity
     guid: 32a01b899790ba14db24092b39937ecf
   - enabled: 1
+    path: Assets/Scenes/Levels/Tutorial.unity
+    guid: 91d7b53e29a346445b2999ecf8b1b22d
+  - enabled: 1
     path: Assets/Scenes/Levels/MainMenu.unity
     guid: da866314da9a63a4f840ff51de64dbdd
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Levels/OfficeLevel1.unity
     guid: 95879f856c9ef5f498d99e396237fc8d
   m_configObjects:

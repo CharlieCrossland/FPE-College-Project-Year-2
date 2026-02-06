@@ -7,6 +7,7 @@ TagManager:
   - ResetScene
   - Wall
   - Health
+  - Breakable
   layers:
   - Default
   - TransparentFX
