@@ -16354,6 +16354,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: --- UI ---
       objectReference: {fileID: 0}
+    - target: {fileID: 2470001523212039914, guid: 1c0f0b54ddaae7541812d4545b29b27c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4630793573591054529, guid: 1c0f0b54ddaae7541812d4545b29b27c, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -18212,6 +18216,14 @@ PrefabInstance:
     - target: {fileID: 4252516259762114688, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5967245522122162182, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
+      propertyPath: sideKickJumpForce
+      value: 8.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5967245522122162182, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
+      propertyPath: snapKickJumpForce
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7124771543057539622, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
       propertyPath: staminaSlider

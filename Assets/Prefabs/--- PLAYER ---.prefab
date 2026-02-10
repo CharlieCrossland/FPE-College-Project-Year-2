@@ -712,6 +712,7 @@ MonoBehaviour:
   mainCamera: {fileID: 0}
   col: {fileID: 0}
   cameraAnimator: {fileID: 783540563586197631}
+  CurrentSpeed: 0
 --- !u!114 &7124771543057539622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -757,7 +758,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InteractorSource: {fileID: 1680718533022797701}
-  InteractRange: 1.2
+  InteractRange: 1.75
   tooltip: {fileID: 0}
 --- !u!114 &1817778200274322506
 MonoBehaviour:

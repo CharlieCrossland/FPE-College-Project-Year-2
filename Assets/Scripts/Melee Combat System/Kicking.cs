@@ -170,7 +170,7 @@ public class Kicking : MonoBehaviour
             else
             {
                 yield return new WaitForSeconds(0.4f);
-                FirstPersonController.Instance.snapKick = true;
+                FirstPersonController.Instance.snapKickJump = true;
                 yield break;
             }
         }
@@ -193,6 +193,8 @@ public class Kicking : MonoBehaviour
             }
             else
             {
+                yield return new WaitForSeconds(0.5f);
+                FirstPersonController.Instance.sideKickJump = true;
                 yield break;
             }
         }

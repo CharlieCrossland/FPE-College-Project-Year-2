@@ -29,8 +29,10 @@ public class FirstPersonController : MonoBehaviour
 
     [Header("Wall Jump")]
     public bool canWallJump;
-    [SerializeField] private float wallJumpForce;
-    public bool snapKick;
+    [SerializeField] private float snapKickJumpForce;
+    [SerializeField] private float sideKickJumpForce;
+    public bool snapKickJump;
+    public bool sideKickJump;
     private int wallJumpCounter;
 
     [Header("Side Kick")]
@@ -254,21 +256,34 @@ public class FirstPersonController : MonoBehaviour
         if (characterController.isGrounded)
         {
             canWallJump = false;
-            snapKick = false;
+            snapKickJump = false;
             wallJumpCounter = 0;
         }
-        else if (snapKick && canWallJump)
+        else if (snapKickJump && canWallJump)
         {
             if (wallJumpCounter < 1)
             {
-                currentMovement.y = wallJumpForce;
-                snapKick = false;
+                currentMovement.y = snapKickJumpForce;
+                snapKickJump = false;
                 wallJumpCounter += 1;
             }
             else
             {
                 Debug.Log("Already wall jumped");
             }    
+        }
+        else if (sideKickJump && canWallJump)
+        {
+            if (wallJumpCounter < 1)
+            {
+                currentMovement.y = sideKickJumpForce;
+                sideKickJump = false;
+                wallJumpCounter += 1;
+            }
+            else
+            {
+                Debug.Log("Already wall jumped");
+            }
         }
     }
 

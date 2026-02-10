@@ -3511,6 +3511,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5967245522122162182, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
+      propertyPath: sideKickJumpForce
+      value: 8.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5967245522122162182, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
+      propertyPath: snapKickJumpForce
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7545004501562855522, guid: 7a76e156a320b6e428fcd821d79cfdda, type: 3}
       propertyPath: m_Name
       value: --- PLAYER ---
